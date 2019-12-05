@@ -9,6 +9,8 @@ public:
     Paddle(QGraphicsScene * scene = 0);
 public:
     void keyPressEvent(QKeyEvent * event);
+private:
+    int m_Speed;
 };
 
 #endif // PADDLE_H

@@ -5,6 +5,7 @@
 #include <QDebug>
 
 Paddle::Paddle(QGraphicsScene * scene)
+    : m_Speed(15)
 {
     setRect(0, 0, 100, 20);
     setFlag(QGraphicsItem::ItemIsFocusable);
@@ -18,26 +19,29 @@ Paddle::Paddle(QGraphicsScene * scene)
 
 void Paddle::keyPressEvent(QKeyEvent *event)
 {
-    //qDebug() << "X position: " << x();
     switch (event->key()) {
+    case Qt::Key_A:
     case Qt::Key_Left:
-        qDebug() << "Key left";
+        //qDebug() << "Key left";
         if(pos().x() > 0) {
-            setPos(x() - 5, y());
+            setPos(x() - m_Speed, y());
         }
     break;
+    case Qt::Key_D:
     case Qt::Key_Right:
-        qDebug() << "Key right";
-        if(pos().x() + 100 < 800) {
-            setPos(x() + 5, y());
+        //qDebug() << "Key right";
+        if(pos().x() + 100 < scene()->width()) {
+            setPos(x() + m_Speed, y());
         }
     break;
-    case Qt::Key_Space:
-        qDebug() << "Space bar";
+    }
+
+    if (event->key() == Qt::Key_Space)
+    {
+        //qDebug() << "Space bar";
         Ball * ball = new Ball();
         ball->setPos(pos().x() + 45, pos().y() - ball->GetSize() - 1);
         //ball->setRotation(-57);
         scene()->addItem(ball);
-        break;
     }
 }

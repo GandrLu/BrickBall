@@ -1,4 +1,5 @@
 #include "ball.h"
+#include "game.h"
 #include "paddle.h"
 #include "brick.h"
 #include <QGraphicsScene>
@@ -6,18 +7,21 @@
 #include <QDebug>
 #include <qmath.h>
 
+extern Game * game;
+
 Ball::Ball(QGraphicsItem * parent)
-    : size(15)
-    , movementRotation(new QGraphicsRotation())
+    : m_Size(15)
+    , m_Speed(30)
+    , m_MovementRotation(new QGraphicsRotation())
 {
 //    this->setRect(0, 0, 10, 10);
     // set graphics
-    setPixmap(QPixmap(":/images/ball.png").scaled(size,size));
+    setPixmap(QPixmap(":/images/ball.png").scaled(m_Size,m_Size));
 
     // connect
     QTimer * timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(move()));
-    movementRotation.setAngle(-120);
+    m_MovementRotation.setAngle(-120);
     /*movementRotation.setAngle(movementRotation.angle() -100);
     qDebug() << "angle -100: " << movementRotation.angle();
     movementRotation.setAngle(movementRotation.angle() -150);
@@ -30,7 +34,7 @@ Ball::Ball(QGraphicsItem * parent)
 
 int Ball::GetSize()
 {
-    return this->size;
+    return this->m_Size;
 }
 
 void Ball::move()
@@ -42,29 +46,29 @@ void Ball::move()
         qDebug() << typeid(*colliding_items[i]).name();
         if (typeid (*colliding_items[i]) == typeid (Paddle))
         {
-            movementRotation.setAngle(-movementRotation.angle());
+            qDebug() << "PADDLE " << -m_MovementRotation.angle();
+            m_MovementRotation.setAngle(-m_MovementRotation.angle());
         }
         if (typeid (*colliding_items[i]) == typeid (Brick))
         {
-            movementRotation.setAngle(-movementRotation.angle());
+            m_MovementRotation.setAngle(-m_MovementRotation.angle());
+            game->m_GetScore()->m_IncreaseScore();
             scene()->removeItem(colliding_items[i]);
             delete colliding_items[i];
         }
     }
 
-
-
     // Bouncing from walls
     // Ball is at upper border y == 0
     if (y() <= 0)
     {
-        qDebug() << "Top";
-        movementRotation.setAngle(-movementRotation.angle());
+        //qDebug() << "Top";
+        m_MovementRotation.setAngle(-m_MovementRotation.angle());
     }
     // Ball is at bottom border y == height
-    else if (y() + size >= scene()->height())
+    else if (y() + m_Size >= scene()->height())
     {
-        qDebug() << "Bottom";
+        //qDebug() << "Bottom";
         scene()->removeItem(this);
         delete this;
         return;
@@ -72,37 +76,37 @@ void Ball::move()
     // Ball is at left border x == 0
     else if (x() <= 0)
     {
-        qDebug() << "Left";
-        if (movementRotation.angle() > -180)
+        //qDebug() << "Left";
+        if (/*m_MovementRotation.angle() > -180 && */m_MovementRotation.angle() < 0)
         {
-            movementRotation.setAngle(movementRotation.angle() - 90);
+            m_MovementRotation.setAngle(m_MovementRotation.angle() + 90);
         }
-        else if (movementRotation.angle() < -180)
+        else if (m_MovementRotation.angle() > 0)
         {
-            movementRotation.setAngle(movementRotation.angle() + 90);
+            m_MovementRotation.setAngle(m_MovementRotation.angle() - 90);
         }
     }
     // Ball is at right border x == width
-    else if (x() + size >= scene()->width())
+    else if (x() + m_Size >= scene()->width())
     {
-        qDebug() << "Right";
-        if (movementRotation.angle() < 0)
+        //qDebug() << "Right";
+        if (m_MovementRotation.angle() < 0)
         {
-            movementRotation.setAngle(movementRotation.angle() - 90);
+            m_MovementRotation.setAngle(m_MovementRotation.angle() - 90);
         }
         else
         {
-            movementRotation.setAngle(movementRotation.angle() + 90);
+            m_MovementRotation.setAngle(m_MovementRotation.angle() + 90);
         }
     }
 
     // Move on
-    int STEP_SIZE = 10;
-    double theta = movementRotation.angle();
+    int STEP_SIZE = m_Speed;
+    double theta = m_MovementRotation.angle();
 
     double dy = STEP_SIZE * qSin(qDegreesToRadians(theta));
     double dx = STEP_SIZE * qCos(qDegreesToRadians(theta));
 
     this->setPos(x() + dx, y() + dy);
-    qDebug() << movementRotation.angle();
+    qDebug() << m_MovementRotation.angle();
 }

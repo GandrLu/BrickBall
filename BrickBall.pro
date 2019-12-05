@@ -20,13 +20,15 @@ SOURCES += \
     brick.cpp \
     game.cpp \
     main.cpp \
-    paddle.cpp
+    paddle.cpp \
+    uitext.cpp
 
 HEADERS += \
     ball.h \
     brick.h \
     game.h \
-    paddle.h
+    paddle.h \
+    uitext.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

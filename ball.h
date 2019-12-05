@@ -17,8 +17,9 @@ public:
 public slots:
     void move();
 private:
-    int size;
-    QGraphicsRotation movementRotation;
+    int m_Size;
+    int m_Speed;
+    QGraphicsRotation m_MovementRotation;
 };
 
 
