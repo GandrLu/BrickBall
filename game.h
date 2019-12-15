@@ -18,6 +18,7 @@ public:
     UiPoints * m_GetScore();
     UiPoints * m_GetLifePoints();
     void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
+    void mousePressEvent(QGraphicsSceneMouseEvent* event);
 private:
     int m_AreaWidth;
     int m_AreaHeight;

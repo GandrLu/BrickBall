@@ -3,7 +3,7 @@
 
 #include <QGraphicsRectItem>
 
-class Brick : public QGraphicsRectItem
+class Brick : public QGraphicsPixmapItem
 {
 public:
     Brick();

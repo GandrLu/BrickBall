@@ -10,7 +10,7 @@ Game::Game(int _Width, int _Height)
 
     for (int i = 0; i < 10; ++i) {
         Brick * brick = new Brick();
-        brick->setRect(0, 0, 80, 30);
+        brick->setPixmap(QPixmap(":/images/brick.png").scaled(80, 30));
         brick->setPos(0 + i * 80, 0);
         addItem(brick);
         bricks[i] = brick;
@@ -46,4 +46,10 @@ UiPoints * Game::m_GetLifePoints()
 
 void Game::mouseMoveEvent(QGraphicsSceneMouseEvent * event) {
     paddle->m_SetXPosition(event->scenePos().x());
+}
+
+void Game::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+    qDebug() << "Scene event";
+    QGraphicsScene::mousePressEvent(event);
+    paddle->m_FireBall();
 }

@@ -9,9 +9,10 @@ Paddle::Paddle(QGraphicsScene * scene)
     , m_XPos(scene->width() * 0.5 - 50)
     , m_YPos(scene->height() - 20)
 {
-    setRect(0, 0, 100, 20);
+    //setRect(0, 0, 100, 20);
     setFlag(QGraphicsItem::ItemIsFocusable);
     setFocus();
+    setPixmap(QPixmap(":/images/paddle2.png").scaled(100,20));
     if (scene != nullptr)
     {
         setPos(m_XPos, m_YPos);
@@ -38,6 +39,8 @@ void Paddle::keyPressEvent(QKeyEvent * event)
     break;
     }
     */
+    qDebug() << "key event";
+
     if (event->key() == Qt::Key_Space)
     {
         qDebug() << "Space bar";
@@ -50,5 +53,14 @@ void Paddle::keyPressEvent(QKeyEvent * event)
 
 void Paddle::m_SetXPosition(int _XPos)
 {
-    setPos(_XPos, m_YPos);
+    if(_XPos + 100 < scene()->width() && _XPos > 0) {
+        setPos(_XPos, m_YPos);
+    }
+}
+
+void Paddle::m_FireBall()
+{
+    Ball* ball = new Ball();
+    ball->setPos(pos().x() + 45, pos().y() - ball->GetSize() - 1);
+    scene()->addItem(ball);
 }

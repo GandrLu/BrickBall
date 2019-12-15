@@ -76,6 +76,7 @@ phony.c
 *.suo
 *.vcproj
 *.vcxproj
+*.vs
 *vcproj.*.*.user
 *vcxproj.*
 

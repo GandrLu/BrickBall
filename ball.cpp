@@ -14,7 +14,6 @@ Ball::Ball(QGraphicsItem * parent)
     , m_Speed(30)
     , m_MovementRotation(new QGraphicsRotation())
 {
-//    this->setRect(0, 0, 10, 10);
     // set graphics
     setPixmap(QPixmap(":/images/ball.png").scaled(m_Size,m_Size));
 
@@ -22,13 +21,6 @@ Ball::Ball(QGraphicsItem * parent)
     QTimer * timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(move()));
     m_MovementRotation.setAngle(-120);
-    /*movementRotation.setAngle(movementRotation.angle() -100);
-    qDebug() << "angle -100: " << movementRotation.angle();
-    movementRotation.setAngle(movementRotation.angle() -150);
-    qDebug() << "angle -250: " << movementRotation.angle();
-    movementRotation.setAngle(-120);
-    movementRotation.setAngle(movementRotation.angle() +150);
-    qDebug() << "angle +150: " << movementRotation.angle();*/
     timer->start(50);
 }
 
