@@ -19,14 +19,13 @@ int main(int argc, char *argv[])
     game = new Game();
 
     qDebug() << "Create Paddle";
-    Paddle * paddle = new Paddle(game);
+    //Paddle * paddle = new Paddle(game);
     //paddle->setRect(0, 0, 100, 20);
     //paddle->setFlag(QGraphicsItem::ItemIsFocusable);
     //paddle->setFocus();
     //paddle->setPos(game->width() * 0.5 - 50, game->height() - 20);
     //game->addItem(paddle);
-
-
+    qDebug() << QCursor::pos();
     //Brick * brick = new Brick();
     //brick->setRect(0, 0, 80, 30);
     //brick->setPos(game->width() * 0.5 - 50, 0);
@@ -38,6 +37,7 @@ int main(int argc, char *argv[])
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setFixedSize(800, 600);
+    view->setMouseTracking(true);
     view->show();
 
     return a.exec();

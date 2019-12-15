@@ -6,20 +6,22 @@
 
 Paddle::Paddle(QGraphicsScene * scene)
     : m_Speed(15)
+    , m_XPos(scene->width() * 0.5 - 50)
+    , m_YPos(scene->height() - 20)
 {
     setRect(0, 0, 100, 20);
     setFlag(QGraphicsItem::ItemIsFocusable);
     setFocus();
     if (scene != nullptr)
     {
-        setPos(scene->width() * 0.5 - 50, scene->height() - 20);
+        setPos(m_XPos, m_YPos);
         scene->addItem(this);
     }
 }
 
-void Paddle::keyPressEvent(QKeyEvent *event)
+void Paddle::keyPressEvent(QKeyEvent * event)
 {
-    switch (event->key()) {
+    /*switch (event->key()) {
     case Qt::Key_A:
     case Qt::Key_Left:
         //qDebug() << "Key left";
@@ -35,13 +37,18 @@ void Paddle::keyPressEvent(QKeyEvent *event)
         }
     break;
     }
-
+    */
     if (event->key() == Qt::Key_Space)
     {
-        //qDebug() << "Space bar";
+        qDebug() << "Space bar";
         Ball * ball = new Ball();
         ball->setPos(pos().x() + 45, pos().y() - ball->GetSize() - 1);
         //ball->setRotation(-57);
         scene()->addItem(ball);
     }
+}
+
+void Paddle::m_SetXPosition(int _XPos)
+{
+    setPos(_XPos, m_YPos);
 }

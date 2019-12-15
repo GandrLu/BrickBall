@@ -2,8 +2,11 @@
 #define GAME_H
 
 #include <QGraphicsScene>
+#include <QGraphicsSceneMouseEvent>
+#include <QDebug>
+#include <paddle.h>
 #include "brick.h"
-#include "uitext.h"
+#include "uipoints.h"
 
 class Game : public QGraphicsScene
 {
@@ -12,13 +15,17 @@ public:
 public:
     int m_GetAreaWidth() const;
     int m_GetAreaHeight() const;
-    UiText * m_GetScore();
+    UiPoints * m_GetScore();
+    UiPoints * m_GetLifePoints();
+    void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
 private:
     int m_AreaWidth;
     int m_AreaHeight;
     QGraphicsScene m_Scene;
     Brick * bricks[10];
-    UiText * m_UiText;
+    UiPoints * m_UiScore;
+    UiPoints * m_UiLifePoints;
+    Paddle * paddle;
 };
 
 #endif // GAME_H

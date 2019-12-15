@@ -16,8 +16,12 @@ Game::Game(int _Width, int _Height)
         bricks[i] = brick;
     }
 
-    m_UiText = new UiText();
-    addItem(m_UiText);
+    m_UiScore = new UiPoints("SCORE ", 0);
+    addItem(m_UiScore);
+    m_UiLifePoints = new UiPoints("LIFES   ", 3);
+    m_UiLifePoints->setPos(0, m_UiScore->boundingRect().height());
+    addItem(m_UiLifePoints);
+    paddle = new Paddle(this);
 }
 
 int Game::m_GetAreaWidth() const
@@ -30,7 +34,16 @@ int Game::m_GetAreaHeight() const
     return m_AreaHeight;
 }
 
-UiText * Game::m_GetScore()
+UiPoints * Game::m_GetScore()
 {
-    return m_UiText;
+    return m_UiScore;
+}
+
+UiPoints * Game::m_GetLifePoints()
+{
+    return m_UiLifePoints;
+}
+
+void Game::mouseMoveEvent(QGraphicsSceneMouseEvent * event) {
+    paddle->m_SetXPosition(event->scenePos().x());
 }

@@ -52,7 +52,7 @@ void Ball::move()
         if (typeid (*colliding_items[i]) == typeid (Brick))
         {
             m_MovementRotation.setAngle(-m_MovementRotation.angle());
-            game->m_GetScore()->m_IncreaseScore();
+            game->m_GetScore()->m_IncreasePoints();
             scene()->removeItem(colliding_items[i]);
             delete colliding_items[i];
         }
@@ -68,7 +68,8 @@ void Ball::move()
     // Ball is at bottom border y == height
     else if (y() + m_Size >= scene()->height())
     {
-        //qDebug() << "Bottom";
+        qDebug() << "Bottom: Remove ball";
+        game->m_GetLifePoints()->m_DecreasePoints();
         scene()->removeItem(this);
         delete this;
         return;
