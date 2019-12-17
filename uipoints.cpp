@@ -7,7 +7,7 @@ UiPoints::UiPoints(QString _UiText, int _StartAmount, QGraphicsItem * _Parent)
     , m_UiText(_UiText)
 {
     setPlainText(QString(m_UiText) + QString::number(m_Points));
-    setDefaultTextColor(Qt::red);
+    setDefaultTextColor(Qt::black);
     setFont(QFont("arial", 16));
 }
 

@@ -11,7 +11,7 @@ extern Game * game;
 
 Ball::Ball(QGraphicsItem * parent)
     : m_Size(15)
-    , m_Speed(30)
+    , m_Speed(10)
     , m_MovementRotation(new QGraphicsRotation())
 {
     // set graphics
@@ -20,8 +20,8 @@ Ball::Ball(QGraphicsItem * parent)
     // connect
     QTimer * timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(move()));
-    m_MovementRotation.setAngle(-120);
-    timer->start(50);
+    m_MovementRotation.setAngle(225);
+    timer->start(25);
 }
 
 int Ball::GetSize()
@@ -38,12 +38,34 @@ void Ball::move()
         qDebug() << typeid(*colliding_items[i]).name();
         if (typeid (*colliding_items[i]) == typeid (Paddle))
         {
-            qDebug() << "PADDLE " << -m_MovementRotation.angle();
-            m_MovementRotation.setAngle(-m_MovementRotation.angle());
+            qDebug() << "PADDLE " << m_MovementRotation.angle();
+            if (90 > m_MovementRotation.angle() && m_MovementRotation.angle() > 0)
+            {
+                m_MovementRotation.setAngle(360 - m_MovementRotation.angle());
+            }
+            else if (180 > m_MovementRotation.angle() && m_MovementRotation.angle() > 90)
+            {
+                qreal value = m_MovementRotation.angle() - 90;
+                m_MovementRotation.setAngle(270 - value);
+            }
+
+            //m_MovementRotation.setAngle(-m_MovementRotation.angle());
         }
         if (typeid (*colliding_items[i]) == typeid (Brick))
         {
-            m_MovementRotation.setAngle(-m_MovementRotation.angle());
+            qDebug() << "BRICK " << m_MovementRotation.angle();
+            if (360 > m_MovementRotation.angle() && m_MovementRotation.angle() > 270)
+            {
+                qreal value = m_MovementRotation.angle() - 270;
+                m_MovementRotation.setAngle(90 - value);
+            }
+            else if (270 > m_MovementRotation.angle() && m_MovementRotation.angle() > 180)
+            {
+                qreal value = m_MovementRotation.angle() - 180;
+                m_MovementRotation.setAngle(180 - value);
+            }
+
+            //m_MovementRotation.setAngle(-m_MovementRotation.angle());
             game->m_GetScore()->m_IncreasePoints();
             scene()->removeItem(colliding_items[i]);
             delete colliding_items[i];
@@ -52,16 +74,25 @@ void Ball::move()
 
     // Bouncing from walls
     // Ball is at upper border y == 0
-    if (y() <= 0)
+    if (y() <= game->m_GetUiBarHeight())
     {
-        //qDebug() << "Top";
-        m_MovementRotation.setAngle(-m_MovementRotation.angle());
+        qDebug() << "Top " << y();
+        if (360 > m_MovementRotation.angle() && m_MovementRotation.angle() > 270)
+        {
+            qreal value = m_MovementRotation.angle() - 270;
+            m_MovementRotation.setAngle(90 - value);
+        }
+        else if (270 > m_MovementRotation.angle() && m_MovementRotation.angle() > 180)
+        {
+            qreal value = m_MovementRotation.angle() - 180;
+            m_MovementRotation.setAngle(180 - value);
+        }
     }
     // Ball is at bottom border y == height
     else if (y() + m_Size >= scene()->height())
     {
         qDebug() << "Bottom: Remove ball";
-        game->m_GetLifePoints()->m_DecreasePoints();
+        game->m_GetLifes()->m_DecreasePoints();
         scene()->removeItem(this);
         delete this;
         return;
@@ -69,27 +100,30 @@ void Ball::move()
     // Ball is at left border x == 0
     else if (x() <= 0)
     {
-        //qDebug() << "Left";
-        if (/*m_MovementRotation.angle() > -180 && */m_MovementRotation.angle() < 0)
+        qDebug() << "Left " << m_MovementRotation.angle();
+        if (180 > m_MovementRotation.angle() && m_MovementRotation.angle() > 90)
         {
-            m_MovementRotation.setAngle(m_MovementRotation.angle() + 90);
+            qreal value = m_MovementRotation.angle() - 90;
+            m_MovementRotation.setAngle(90 - value);
         }
-        else if (m_MovementRotation.angle() > 0)
+        else if (270 > m_MovementRotation.angle() && m_MovementRotation.angle() > 180)
         {
-            m_MovementRotation.setAngle(m_MovementRotation.angle() - 90);
+            qreal value = m_MovementRotation.angle() - 180;
+            m_MovementRotation.setAngle(360 - value);
         }
     }
     // Ball is at right border x == width
     else if (x() + m_Size >= scene()->width())
     {
-        //qDebug() << "Right";
-        if (m_MovementRotation.angle() < 0)
+        qDebug() << "Right " << m_MovementRotation.angle();
+        if (90 > m_MovementRotation.angle() && m_MovementRotation.angle() > 0)
         {
-            m_MovementRotation.setAngle(m_MovementRotation.angle() - 90);
+            m_MovementRotation.setAngle(180 - m_MovementRotation.angle());
         }
-        else
+        else if (360 > m_MovementRotation.angle() && m_MovementRotation.angle() > 270)
         {
-            m_MovementRotation.setAngle(m_MovementRotation.angle() + 90);
+            qreal value = 360 - m_MovementRotation.angle();
+            m_MovementRotation.setAngle(180 + value);
         }
     }
 
@@ -101,5 +135,5 @@ void Ball::move()
     double dx = STEP_SIZE * qCos(qDegreesToRadians(theta));
 
     this->setPos(x() + dx, y() + dy);
-    qDebug() << m_MovementRotation.angle();
+    //qDebug() << m_MovementRotation.angle();
 }

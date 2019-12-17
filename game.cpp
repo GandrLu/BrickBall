@@ -2,46 +2,49 @@
 #include <QGraphicsScene>
 
 Game::Game(int _Width, int _Height)
-    : m_AreaWidth(_Width)
-    , m_AreaHeight(_Height)
-    , m_Scene(new QGraphicsScene)
+    : m_UiBarWidth(_Width)
+    , m_UiBarHeight(35)
+    , m_PlayAreaWidth(_Width)
+    , m_PlayAreaHeight(_Height - m_UiBarHeight)
+    //, m_Scene(new QGraphicsScene)
 {
     setSceneRect(0, 0, _Width, _Height);
 
     for (int i = 0; i < 10; ++i) {
         Brick * brick = new Brick();
         brick->setPixmap(QPixmap(":/images/brick.png").scaled(80, 30));
-        brick->setPos(0 + i * 80, 0);
+        brick->setPos(0 + i * 80, m_UiBarHeight);
         addItem(brick);
         bricks[i] = brick;
     }
-
-    m_UiScore = new UiPoints("SCORE ", 0);
-    addItem(m_UiScore);
-    m_UiLifePoints = new UiPoints("LIFES   ", 3);
-    m_UiLifePoints->setPos(0, m_UiScore->boundingRect().height());
-    addItem(m_UiLifePoints);
+    m_UiBar = new UiBar(this);
+    addItem(m_UiBar);
     paddle = new Paddle(this);
 }
 
 int Game::m_GetAreaWidth() const
 {
-    return m_AreaWidth;
+    return m_PlayAreaWidth;
 }
 
 int Game::m_GetAreaHeight() const
 {
-    return m_AreaHeight;
+    return m_PlayAreaHeight;
+}
+
+int Game::m_GetUiBarHeight()
+{
+    return m_UiBarHeight;
 }
 
 UiPoints * Game::m_GetScore()
 {
-    return m_UiScore;
+    return m_UiBar->m_GetScore();
 }
 
-UiPoints * Game::m_GetLifePoints()
+UiPoints * Game::m_GetLifes()
 {
-    return m_UiLifePoints;
+    return m_UiBar->m_GetLifes();
 }
 
 void Game::mouseMoveEvent(QGraphicsSceneMouseEvent * event) {

@@ -7,6 +7,7 @@
 #include <paddle.h>
 #include "brick.h"
 #include "uipoints.h"
+#include "uibar.h"
 
 class Game : public QGraphicsScene
 {
@@ -15,17 +16,19 @@ public:
 public:
     int m_GetAreaWidth() const;
     int m_GetAreaHeight() const;
+    int m_GetUiBarHeight();
     UiPoints * m_GetScore();
-    UiPoints * m_GetLifePoints();
+    UiPoints * m_GetLifes();
     void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
 private:
-    int m_AreaWidth;
-    int m_AreaHeight;
-    QGraphicsScene m_Scene;
+    int m_PlayAreaWidth;
+    int m_PlayAreaHeight;
+    int m_UiBarWidth;
+    int m_UiBarHeight;
+    //QGraphicsScene m_Scene;
     Brick * bricks[10];
-    UiPoints * m_UiScore;
-    UiPoints * m_UiLifePoints;
+    UiBar * m_UiBar;
     Paddle * paddle;
 };
 
