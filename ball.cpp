@@ -20,7 +20,7 @@ Ball::Ball(QGraphicsItem * parent)
     // connect
     QTimer * timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(move()));
-    m_MovementRotation.setAngle(225);
+    m_MovementRotation.setAngle(270);
     timer->start(25);
 }
 
@@ -38,18 +38,19 @@ void Ball::move()
         qDebug() << typeid(*colliding_items[i]).name();
         if (typeid (*colliding_items[i]) == typeid (Paddle))
         {
+            qDebug() << colliding_items[i]->boundingRect().width();
+            float paddlePosX = colliding_items[i]->pos().x();
+            float relativePosX = pos().x() - paddlePosX;
+            float factor = (relativePosX - 50) / 50;
+            qDebug() << "Faktor " << factor;
+            float newAngle = factor * 80;
+            qDebug() << "newangle " << newAngle;
+    
+            newAngle += 270;
+            m_MovementRotation.setAngle(newAngle);
+            
             qDebug() << "PADDLE " << m_MovementRotation.angle();
-            if (90 > m_MovementRotation.angle() && m_MovementRotation.angle() > 0)
-            {
-                m_MovementRotation.setAngle(360 - m_MovementRotation.angle());
-            }
-            else if (180 > m_MovementRotation.angle() && m_MovementRotation.angle() > 90)
-            {
-                qreal value = m_MovementRotation.angle() - 90;
-                m_MovementRotation.setAngle(270 - value);
-            }
-
-            //m_MovementRotation.setAngle(-m_MovementRotation.angle());
+ 
         }
         if (typeid (*colliding_items[i]) == typeid (Brick))
         {
@@ -76,7 +77,7 @@ void Ball::move()
     // Ball is at upper border y == 0
     if (y() <= game->m_GetUiBarHeight())
     {
-        qDebug() << "Top " << y();
+        //qDebug() << "Top " << y();
         if (360 > m_MovementRotation.angle() && m_MovementRotation.angle() > 270)
         {
             qreal value = m_MovementRotation.angle() - 270;
@@ -86,6 +87,10 @@ void Ball::move()
         {
             qreal value = m_MovementRotation.angle() - 180;
             m_MovementRotation.setAngle(180 - value);
+        }
+        else if (m_MovementRotation.angle() == 270)
+        {
+            m_MovementRotation.setAngle(90);
         }
     }
     // Ball is at bottom border y == height
