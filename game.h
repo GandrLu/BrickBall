@@ -22,10 +22,10 @@ public:
     void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
 private:
-    int m_PlayAreaWidth;
-    int m_PlayAreaHeight;
     int m_UiBarWidth;
     int m_UiBarHeight;
+    int m_PlayAreaWidth;
+    int m_PlayAreaHeight;
     //QGraphicsScene m_Scene;
     Brick * bricks[10];
     UiBar * m_UiBar;

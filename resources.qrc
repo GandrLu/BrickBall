@@ -1,12 +1,19 @@
 <RCC>
     <qresource prefix="/sounds">
-        <file>hint.mp3</file>
-        <file>score_powerOn.mp3</file>
-        <file>wrongAnswer.mp3</file>
+        <file>resources/sounds/hint.mp3</file>
+        <file>resources/sounds/score_powerOn.mp3</file>
+        <file>resources/sounds/wrongAnswer.mp3</file>
     </qresource>
     <qresource prefix="/images">
-        <file>ball.png</file>
-        <file>brick.png</file>
-        <file>paddle2.png</file>
+        <file>resources/images/background.png</file>
+        <file>resources/images/ball.png</file>
+        <file>resources/images/brick.png</file>
+        <file>resources/images/brick_blue.png</file>
+        <file>resources/images/brick_brown.png</file>
+        <file>resources/images/brick_green.png</file>
+        <file>resources/images/brick_red.png</file>
+        <file>resources/images/brick_yellow.png</file>
+        <file>resources/images/paddle2.png</file>
+        <file>resources/images/paddleboat.png</file>
     </qresource>
 </RCC>

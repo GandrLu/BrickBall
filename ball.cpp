@@ -21,12 +21,12 @@ Ball::Ball(QGraphicsItem * parent)
     m_MovementRotation.setAngle(270);
 
     // set graphics
-    setPixmap(QPixmap(":/images/ball.png").scaled(m_Size,m_Size));
+    setPixmap(QPixmap(":/images/resources/images/ball.png").scaled(m_Size,m_Size));
 
     // set sound
-    m_SoundDefault->setMedia(QUrl("qrc:/sounds/hint.mp3"));
-    m_SoundScore->setMedia(QUrl("qrc:/sounds/score_powerOn.mp3"));
-    m_SoundFail->setMedia(QUrl("qrc:/sounds/wrongAnswer.mp3"));
+    m_SoundDefault->setMedia(QUrl("qrc:/sounds/resources/sounds/hint.mp3"));
+    m_SoundScore->setMedia(QUrl("qrc:/sounds/resources/sounds/score_powerOn.mp3"));
+    m_SoundFail->setMedia(QUrl("qrc:/sounds/resources/sounds/wrongAnswer.mp3"));
 
     // connect slot
     QTimer * timer = new QTimer();
@@ -64,7 +64,7 @@ void Ball::move()
     QList<QGraphicsItem *> colliding_items = collidingItems();
     for(int i = 0, n = colliding_items.size(); i < n; ++i)
     {
-        qDebug() << typeid(*colliding_items[i]).name();
+        //qDebug() << typeid(*colliding_items[i]).name();
         if (typeid (*colliding_items[i]) == typeid (Paddle))
         {
             qDebug() << colliding_items[i]->boundingRect().width();
@@ -72,7 +72,7 @@ void Ball::move()
             float relativePosX = pos().x() - paddlePosX;
             float factor = (relativePosX - 50) / 50;
             qDebug() << "Faktor " << factor;
-            float newAngle = factor * 80;
+            float newAngle = factor * 60;
             qDebug() << "newangle " << newAngle;
     
             newAngle += 270;

@@ -9,10 +9,13 @@ Game::Game(int _Width, int _Height)
     //, m_Scene(new QGraphicsScene)
 {
     setSceneRect(0, 0, _Width, _Height);
+    QPixmap* background = new QPixmap(":/images/resources/images/background.png");
+    
+    addPixmap(background->scaled(m_PlayAreaWidth, m_PlayAreaHeight))->setPos(0, m_UiBarHeight);
 
     for (int i = 0; i < 10; ++i) {
         Brick * brick = new Brick();
-        brick->setPixmap(QPixmap(":/images/brick.png").scaled(80, 30));
+        brick->setPixmap(QPixmap(":/images/resources/images/brick_green.png").scaled(80, 30));
         brick->setPos(0 + i * 80, m_UiBarHeight);
         addItem(brick);
         bricks[i] = brick;

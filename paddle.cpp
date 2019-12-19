@@ -12,7 +12,7 @@ Paddle::Paddle(QGraphicsScene * scene)
     //setRect(0, 0, 100, 20);
     setFlag(QGraphicsItem::ItemIsFocusable);
     setFocus();
-    setPixmap(QPixmap(":/images/paddle2.png").scaled(100,20));
+    setPixmap(QPixmap(":/images/resources/images/paddleboat.png").scaled(100,20));
     if (scene != nullptr)
     {
         setPos(m_XPos, m_YPos);
