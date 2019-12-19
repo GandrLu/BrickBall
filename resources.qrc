@@ -1,7 +1,12 @@
 <RCC>
+    <qresource prefix="/sounds">
+        <file>hint.mp3</file>
+        <file>score_powerOn.mp3</file>
+        <file>wrongAnswer.mp3</file>
+    </qresource>
     <qresource prefix="/images">
         <file>ball.png</file>
-        <file>paddle2.png</file>
         <file>brick.png</file>
+        <file>paddle2.png</file>
     </qresource>
 </RCC>

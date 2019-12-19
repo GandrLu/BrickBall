@@ -6,27 +6,56 @@
 #include <QTimer>
 #include <QDebug>
 #include <qmath.h>
+#include <qmediaplaylist.h>
 
 extern Game * game;
 
 Ball::Ball(QGraphicsItem * parent)
     : m_Size(15)
     , m_Speed(10)
-    , m_MovementRotation(new QGraphicsRotation())
+    , m_MovementRotation(new QGraphicsRotation(this))
+    , m_SoundDefault(new QMediaPlayer(this))
+    , m_SoundScore(new QMediaPlayer(this))
+    , m_SoundFail(new QMediaPlayer(this))
 {
+    m_MovementRotation.setAngle(270);
+
     // set graphics
     setPixmap(QPixmap(":/images/ball.png").scaled(m_Size,m_Size));
 
-    // connect
+    // set sound
+    m_SoundDefault->setMedia(QUrl("qrc:/sounds/hint.mp3"));
+    m_SoundScore->setMedia(QUrl("qrc:/sounds/score_powerOn.mp3"));
+    m_SoundFail->setMedia(QUrl("qrc:/sounds/wrongAnswer.mp3"));
+
+    // connect slot
     QTimer * timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(move()));
-    m_MovementRotation.setAngle(270);
     timer->start(25);
 }
 
 int Ball::GetSize()
 {
     return this->m_Size;
+}
+
+void Ball::m_PlaySound(int _Type)
+{
+    switch (_Type)
+    {
+    case 1:
+        m_SoundScore->setPosition(0);
+        m_SoundScore->play();
+        break;
+    case 2:
+        m_SoundFail->setPosition(0);
+        m_SoundFail->play();
+        break;
+    default:
+        m_SoundDefault->setPosition(0);
+        m_SoundDefault->play();
+        break;
+    }
 }
 
 void Ball::move()
@@ -50,7 +79,7 @@ void Ball::move()
             m_MovementRotation.setAngle(newAngle);
             
             qDebug() << "PADDLE " << m_MovementRotation.angle();
- 
+            m_PlaySound();
         }
         if (typeid (*colliding_items[i]) == typeid (Brick))
         {
@@ -65,6 +94,7 @@ void Ball::move()
                 qreal value = m_MovementRotation.angle() - 180;
                 m_MovementRotation.setAngle(180 - value);
             }
+            m_PlaySound(2);
 
             //m_MovementRotation.setAngle(-m_MovementRotation.angle());
             game->m_GetScore()->m_IncreasePoints();
@@ -92,10 +122,12 @@ void Ball::move()
         {
             m_MovementRotation.setAngle(90);
         }
+        m_PlaySound();
     }
     // Ball is at bottom border y == height
     else if (y() + m_Size >= scene()->height())
     {
+        m_PlaySound(1);
         qDebug() << "Bottom: Remove ball";
         game->m_GetLifes()->m_DecreasePoints();
         scene()->removeItem(this);
@@ -116,6 +148,7 @@ void Ball::move()
             qreal value = m_MovementRotation.angle() - 180;
             m_MovementRotation.setAngle(360 - value);
         }
+        m_PlaySound();
     }
     // Ball is at right border x == width
     else if (x() + m_Size >= scene()->width())
@@ -130,6 +163,7 @@ void Ball::move()
             qreal value = 360 - m_MovementRotation.angle();
             m_MovementRotation.setAngle(180 + value);
         }
+        m_PlaySound();
     }
 
     // Move on
