@@ -94,7 +94,7 @@ void Ball::move()
                 qreal value = m_MovementRotation.angle() - 180;
                 m_MovementRotation.setAngle(180 - value);
             }
-            m_PlaySound(2);
+            m_PlaySound(1);
 
             //m_MovementRotation.setAngle(-m_MovementRotation.angle());
             game->m_GetScore()->m_IncreasePoints();
@@ -127,7 +127,7 @@ void Ball::move()
     // Ball is at bottom border y == height
     else if (y() + m_Size >= scene()->height())
     {
-        m_PlaySound(1);
+        m_PlaySound(2);
         qDebug() << "Bottom: Remove ball";
         game->m_GetLifes()->m_DecreasePoints();
         scene()->removeItem(this);
