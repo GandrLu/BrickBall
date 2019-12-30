@@ -9,13 +9,13 @@ Game::Game(int _Width, int _Height)
     //, m_Scene(new QGraphicsScene)
 {
     setSceneRect(0, 0, _Width, _Height);
-    QPixmap* background = new QPixmap(":/images/resources/images/background.png");
+    QPixmap* background = new QPixmap(":/images/resources/images/background_simple.png");
     
     addPixmap(background->scaled(m_PlayAreaWidth, m_PlayAreaHeight))->setPos(0, m_UiBarHeight);
 
     for (int i = 0; i < 10; ++i) {
         Brick * brick = new Brick();
-        brick->setPixmap(QPixmap(":/images/resources/images/brick_green.png").scaled(80, 30));
+        brick->setPixmap(QPixmap(":/images/resources/images/brick_red.png").scaled(80, 30));
         brick->setPos(0 + i * 80, m_UiBarHeight);
         addItem(brick);
         bricks[i] = brick;
@@ -23,6 +23,9 @@ Game::Game(int _Width, int _Height)
     m_UiBar = new UiBar(this);
     addItem(m_UiBar);
     paddle = new Paddle(this);
+    m_SoundLostBall = new QMediaPlayer();
+    m_SoundLostBall->setMedia(QUrl("qrc:/sounds/resources/sounds/wrongAnswer.mp3"));
+
 }
 
 int Game::m_GetAreaWidth() const
@@ -58,4 +61,10 @@ void Game::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     qDebug() << "Scene event";
     QGraphicsScene::mousePressEvent(event);
     paddle->m_FireBall();
+}
+
+void Game::m_PlayBallLostSound()
+{
+    m_SoundLostBall->setPosition(0);
+    m_SoundLostBall->play();
 }

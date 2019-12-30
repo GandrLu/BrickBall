@@ -16,7 +16,6 @@ Ball::Ball(QGraphicsItem * parent)
     , m_MovementRotation(new QGraphicsRotation(this))
     , m_SoundDefault(new QMediaPlayer(this))
     , m_SoundScore(new QMediaPlayer(this))
-    , m_SoundFail(new QMediaPlayer(this))
 {
     m_MovementRotation.setAngle(270);
 
@@ -26,7 +25,6 @@ Ball::Ball(QGraphicsItem * parent)
     // set sound
     m_SoundDefault->setMedia(QUrl("qrc:/sounds/resources/sounds/hint.mp3"));
     m_SoundScore->setMedia(QUrl("qrc:/sounds/resources/sounds/score_powerOn.mp3"));
-    m_SoundFail->setMedia(QUrl("qrc:/sounds/resources/sounds/wrongAnswer.mp3"));
 
     // connect slot
     QTimer * timer = new QTimer();
@@ -48,8 +46,7 @@ void Ball::m_PlaySound(int _Type)
         m_SoundScore->play();
         break;
     case 2:
-        m_SoundFail->setPosition(0);
-        m_SoundFail->play();
+        game->m_PlayBallLostSound();
         break;
     default:
         m_SoundDefault->setPosition(0);

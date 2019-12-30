@@ -25,7 +25,6 @@ private:
     // one takes to long and avoids playing different sounds in a fast sequence
     QMediaPlayer* m_SoundDefault;
     QMediaPlayer* m_SoundScore;
-    QMediaPlayer* m_SoundFail;
 private:
     void m_PlaySound(int _Type = 0);
 };
