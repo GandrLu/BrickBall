@@ -10,7 +10,6 @@ Game::Game(int _Width, int _Height)
 {
     setSceneRect(0, 0, _Width, _Height);
     QPixmap* background = new QPixmap(":/images/resources/images/background_simple.png");
-    
     addPixmap(background->scaled(m_PlayAreaWidth, m_PlayAreaHeight))->setPos(0, m_UiBarHeight);
 
     for (int i = 0; i < 10; ++i) {
