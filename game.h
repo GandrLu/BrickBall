@@ -5,15 +5,17 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 #include <paddle.h>
-#include "brick.h"
-#include "uipoints.h"
-#include "uibar.h"
 #include <qmediaplayer.h>
+
+class Brick;
+class GameView;
+class UiBar;
+class UiPoints;
 
 class Game : public QGraphicsScene
 {
 public:
-    Game(int _Width = 800, int _Height = 600);
+    Game(int _Width, int _Height, GameView* _ParentView);
 public:
     int m_GetAreaWidth() const;
     int m_GetAreaHeight() const;
@@ -22,6 +24,7 @@ public:
     UiPoints * m_GetLifes();
     void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
+    void keyPressEvent(QKeyEvent* event);
     void m_PlayBallLostSound();
 private:
     int m_UiBarWidth;
@@ -32,6 +35,7 @@ private:
     Brick * bricks[10];
     UiBar * m_UiBar;
     Paddle * paddle;
+    GameView * m_GameView;
     // Sound of lost ball has to be played at the game instance because the 
     // ball itself gets deleted before it is able to play the sound
     QMediaPlayer* m_SoundLostBall;

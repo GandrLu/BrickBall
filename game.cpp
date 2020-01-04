@@ -1,11 +1,14 @@
 #include "game.h"
-#include <QGraphicsScene>
+#include "brick.h"
+#include "uibar.h"
+#include "gameview.h"
 
-Game::Game(int _Width, int _Height)
+Game::Game(int _Width, int _Height, GameView* _ParentView)
     : m_UiBarWidth(_Width)
     , m_UiBarHeight(35)
     , m_PlayAreaWidth(_Width)
     , m_PlayAreaHeight(_Height - m_UiBarHeight)
+    , m_GameView(_ParentView)
     //, m_Scene(new QGraphicsScene)
 {
     setSceneRect(0, 0, _Width, _Height);
@@ -59,7 +62,15 @@ void Game::mouseMoveEvent(QGraphicsSceneMouseEvent * event) {
 void Game::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     qDebug() << "Scene event";
     QGraphicsScene::mousePressEvent(event);
-    paddle->m_FireBall();
+    paddle->m_FireBall(this);
+}
+
+void Game::keyPressEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Escape)
+    {
+        m_GameView->m_LoadMainMenu();
+    }
 }
 
 void Game::m_PlayBallLostSound()

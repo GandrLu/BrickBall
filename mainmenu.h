@@ -9,24 +9,23 @@
 #include <QApplication>
 #include <QGuiApplication>
 #include <QGraphicsView>
-#include "game.h"
+
+class GameView;
 
 class MainMenu : public QGraphicsScene
 {
 	Q_OBJECT
 public:
-	MainMenu(int _Width, int _Height, QGraphicsView* _View, Game* _Game, QObject* _Parent = 0);
+	MainMenu(int _Width, int _Height, GameView* _ParentView);
 	~MainMenu();
 public slots:
 	void s_StartGame();
-	void s_QuitApplication();
 private:
 	QGraphicsTextItem * m_TextTitle;
 	QGraphicsTextItem * m_TextCopyright;
 	QPushButton * m_ButtonPlay;
 	QPushButton * m_ButtonExit;
-	QGraphicsView * m_View;
-	Game * m_Game;
+	GameView * m_GameView;
 };
 
 #endif // MAINMENU_H

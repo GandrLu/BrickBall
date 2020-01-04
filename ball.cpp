@@ -1,22 +1,17 @@
 #include "ball.h"
 #include "game.h"
-#include "paddle.h"
 #include "brick.h"
-#include <QGraphicsScene>
-#include <QTimer>
-#include <QDebug>
-#include <qmath.h>
-#include <qmediaplaylist.h>
+#include "uipoints.h"
 
-extern Game * game;
-
-Ball::Ball(QGraphicsItem * parent)
+Ball::Ball(Game* _Game, QObject* _Parent)
     : m_Size(15)
     , m_Speed(10)
     , m_MovementRotation(new QGraphicsRotation(this))
     , m_SoundDefault(new QMediaPlayer(this))
     , m_SoundScore(new QMediaPlayer(this))
+    , m_Game(_Game)
 {
+    setParent(_Parent);
     m_MovementRotation.setAngle(270);
 
     // set graphics
@@ -46,7 +41,7 @@ void Ball::m_PlaySound(int _Type)
         m_SoundScore->play();
         break;
     case 2:
-        game->m_PlayBallLostSound();
+        m_Game->m_PlayBallLostSound();
         break;
     default:
         m_SoundDefault->setPosition(0);
@@ -94,7 +89,7 @@ void Ball::move()
             m_PlaySound(1);
 
             //m_MovementRotation.setAngle(-m_MovementRotation.angle());
-            game->m_GetScore()->m_IncreasePoints();
+            m_Game->m_GetScore()->m_IncreasePoints();
             scene()->removeItem(colliding_items[i]);
             delete colliding_items[i];
         }
@@ -102,7 +97,7 @@ void Ball::move()
 
     // Bouncing from walls
     // Ball is at upper border y == 0
-    if (y() <= game->m_GetUiBarHeight())
+    if (y() <= m_Game->m_GetUiBarHeight())
     {
         //qDebug() << "Top " << y();
         if (360 > m_MovementRotation.angle() && m_MovementRotation.angle() > 270)
@@ -126,7 +121,7 @@ void Ball::move()
     {
         m_PlaySound(2);
         qDebug() << "Bottom: Remove ball";
-        game->m_GetLifes()->m_DecreasePoints();
+        m_Game->m_GetLifes()->m_DecreasePoints();
         scene()->removeItem(this);
         delete this;
         return;

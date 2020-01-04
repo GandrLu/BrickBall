@@ -1,9 +1,9 @@
 #include "mainmenu.h"
 #include <qdebug.h>
+#include "gameview.h"
 
-MainMenu::MainMenu(int _Width, int _Height, QGraphicsView* _View, Game* _Game, QObject* _Parent)
-    : m_View(_View)
-    , m_Game(_Game)
+MainMenu::MainMenu(int _Width, int _Height, GameView* _ParentView)
+    : m_GameView(_ParentView)
 {
     QPixmap* background = new QPixmap(":/images/resources/images/background_simple.png");
     addPixmap(background->scaled(_Width, _Height))->setPos(0, 0);
@@ -41,14 +41,5 @@ MainMenu::~MainMenu()
 
 void MainMenu::s_StartGame()
 {
-    m_View->setScene(m_Game);
-    m_View->show();
-    // Hide cursor
-    QGuiApplication::setOverrideCursor(Qt::BlankCursor);
-}
-
-void MainMenu::s_QuitApplication()
-{
-    qDebug() << "quit GAME";
-
+    m_GameView->m_LoadGame();
 }

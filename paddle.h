@@ -4,15 +4,19 @@
 #include <QGraphicsRectItem>
 #include <QMouseEvent>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsScene>
+#include <QKeyEvent>
+#include <QDebug>
+
+class Game;
 
 class Paddle: public QGraphicsPixmapItem
 {
 public:
     Paddle(QGraphicsScene * scene = 0);
 public:
-    void keyPressEvent(QKeyEvent * event);
     void m_SetXPosition(int _XPos);
-    void m_FireBall();
+    void m_FireBall(Game * _Game);
 private:
     int m_Speed;
     int m_XPos;

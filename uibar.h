@@ -3,7 +3,8 @@
 
 #include <QGraphicsItemGroup>
 #include <QGraphicsScene>
-#include "uipoints.h"
+
+class UiPoints;
 
 class UiBar : public QGraphicsItemGroup
 {

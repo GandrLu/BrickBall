@@ -1,6 +1,7 @@
 #include "uibar.h"
 #include <QDebug>
 #include <QGraphicsLineItem>
+#include "uipoints.h"
 
 UiBar::UiBar(QGraphicsScene * parent)
 {
