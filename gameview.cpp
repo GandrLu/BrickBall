@@ -5,6 +5,8 @@
 GameView::GameView(int _Width, int _Height)
     : m_MainMenu(new MainMenu(_Width, _Height, this))
     , m_Game(new Game(_Width, _Height, this))
+    , m_GameWidth(_Width)
+    , m_GameHeight(_Height)
 {
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -27,6 +29,7 @@ void GameView::keyPressEvent(QKeyEvent* event)
 
 void GameView::m_LoadMainMenu()
 {
+    delete m_Game;
     setScene(m_MainMenu);
     show(); // needed?
     // Show cursor
@@ -35,6 +38,7 @@ void GameView::m_LoadMainMenu()
 
 void GameView::m_LoadGame()
 {
+    m_Game = new Game(m_GameWidth, m_GameHeight, this);
     setScene(m_Game);
     show(); // needed?
     // Hide cursor

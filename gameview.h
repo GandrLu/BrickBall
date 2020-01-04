@@ -19,6 +19,8 @@ public:
 	void m_LoadMainMenu();
 	void m_LoadGame();
 private:
+	int m_GameWidth;
+	int m_GameHeight;
 	Game* m_Game;
 	MainMenu* m_MainMenu;
 };
