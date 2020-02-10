@@ -1,3 +1,4 @@
+#include <math.h>
 #include "game.h"
 #include "brick.h"
 #include "uibar.h"
@@ -8,6 +9,10 @@ Game::Game(int _Width, int _Height, GameView* _ParentView)
     , m_UiBarHeight(35)
     , m_PlayAreaWidth(_Width)
     , m_PlayAreaHeight(_Height - m_UiBarHeight)
+    , m_MaxHorizontalBricks(16)
+    , m_MaxVerticalBricks(4)
+    , m_AvailableBalls(1)
+    , m_BallsInGame(0)
     , m_GameView(_ParentView)
     //, m_Scene(new QGraphicsScene)
 {
@@ -15,16 +20,29 @@ Game::Game(int _Width, int _Height, GameView* _ParentView)
     QPixmap* background = new QPixmap(":/images/resources/images/background_simple.png");
     addPixmap(background->scaled(m_PlayAreaWidth, m_PlayAreaHeight))->setPos(0, m_UiBarHeight);
 
-    for (int i = 0; i < 10; ++i) {
+    // Calculate brick size
+    int brickWidth = (int)roundf(m_PlayAreaWidth / m_MaxHorizontalBricks);
+    int brickHeight = (int)roundf(brickWidth / 3);
+    
+    for (int i = 0; i < m_MaxHorizontalBricks; ++i) {
         Brick * brick = new Brick();
-        brick->setPixmap(QPixmap(":/images/resources/images/brick_red.png").scaled(80, 30));
-        brick->setPos(0 + i * 80, m_UiBarHeight);
+        brick->setPixmap(QPixmap(":/images/resources/images/brick_red.png").scaled(brickWidth, brickHeight));
+        brick->setPos(0 + i * brickWidth, m_UiBarHeight);
         addItem(brick);
-        bricks[i] = brick;
+        bricks[0][i] = brick;
     }
+    for (int i = 0; i < m_MaxHorizontalBricks; ++i) {
+        Brick* brick = new Brick();
+        brick->setPixmap(QPixmap(":/images/resources/images/brick_blue.png").scaled(brickWidth, brickHeight));
+        brick->setPos(0 + i * brickWidth, m_UiBarHeight + brickHeight);
+        addItem(brick);
+        bricks[1][i] = brick;
+    }
+
     m_UiBar = new UiBar(this);
     addItem(m_UiBar);
     paddle = new Paddle(this);
+    paddle->m_PrepareBall(this);
     m_SoundLostBall = new QMediaPlayer();
     m_SoundLostBall->setMedia(QUrl("qrc:/sounds/resources/sounds/wrongAnswer.mp3"));
 
@@ -45,6 +63,19 @@ int Game::m_GetUiBarHeight()
     return m_UiBarHeight;
 }
 
+int Game::increaseAvailableBalls(int _Amount)
+{
+    paddle->m_PrepareBall(this);
+    this->m_AvailableBalls += _Amount;
+    return this->m_AvailableBalls;
+}
+
+int Game::decreaseBallsInGame(int _Amount)
+{
+    this->m_BallsInGame -= _Amount;
+    return this->m_BallsInGame;
+}
+
 UiPoints * Game::m_GetScore()
 {
     return m_UiBar->m_GetScore();
@@ -60,9 +91,13 @@ void Game::mouseMoveEvent(QGraphicsSceneMouseEvent * event) {
 }
 
 void Game::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-    qDebug() << "Scene event";
     QGraphicsScene::mousePressEvent(event);
-    paddle->m_FireBall(this);
+    if (this->m_AvailableBalls > 0)
+    {
+        paddle->m_FireBall();
+        ++this->m_BallsInGame;
+        --this->m_AvailableBalls;
+    }
 }
 
 void Game::keyPressEvent(QKeyEvent* event)

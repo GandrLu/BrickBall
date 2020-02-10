@@ -22,9 +22,11 @@ public:
     Ball(Game* _Game, QObject* _Parent = 0);
 public:
     int GetSize();
+    void Fire();
 public slots:
     void move();
 private:
+    bool m_Fired;
     int m_Size;
     int m_Speed;
     QGraphicsRotation m_MovementRotation;

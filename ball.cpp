@@ -10,6 +10,7 @@ Ball::Ball(Game* _Game, QObject* _Parent)
     , m_SoundDefault(new QMediaPlayer(this))
     , m_SoundScore(new QMediaPlayer(this))
     , m_Game(_Game)
+    , m_Fired(false)
 {
     setParent(_Parent);
     m_MovementRotation.setAngle(270);
@@ -32,6 +33,11 @@ int Ball::GetSize()
     return this->m_Size;
 }
 
+void Ball::Fire()
+{
+    this->m_Fired = true;
+}
+
 void Ball::m_PlaySound(int _Type)
 {
     switch (_Type)
@@ -52,6 +58,8 @@ void Ball::m_PlaySound(int _Type)
 
 void Ball::move()
 {
+    if (!this->m_Fired)
+        return;
     // Colliding with bricks
     QList<QGraphicsItem *> colliding_items = collidingItems();
     for(int i = 0, n = colliding_items.size(); i < n; ++i)
@@ -122,6 +130,10 @@ void Ball::move()
         m_PlaySound(2);
         qDebug() << "Bottom: Remove ball";
         m_Game->m_GetLifes()->m_DecreasePoints();
+        if (m_Game->m_GetLifes()->m_GetPoints() > 0)
+        {
+            m_Game->increaseAvailableBalls(1);
+        }
         scene()->removeItem(this);
         delete this;
         return;

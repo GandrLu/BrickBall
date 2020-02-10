@@ -20,6 +20,8 @@ public:
     int m_GetAreaWidth() const;
     int m_GetAreaHeight() const;
     int m_GetUiBarHeight();
+    int increaseAvailableBalls(int _Amount);
+    int decreaseBallsInGame(int _Amount);
     UiPoints * m_GetScore();
     UiPoints * m_GetLifes();
     void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
@@ -31,8 +33,12 @@ private:
     int m_UiBarHeight;
     int m_PlayAreaWidth;
     int m_PlayAreaHeight;
+    int m_MaxHorizontalBricks;
+    int m_MaxVerticalBricks;
+    int m_AvailableBalls;
+    int m_BallsInGame;
     //QGraphicsScene m_Scene;
-    Brick * bricks[10];
+    Brick * bricks[4][16];
     UiBar * m_UiBar;
     Paddle * paddle;
     GameView * m_GameView;

@@ -17,9 +17,12 @@ int main(int argc, char *argv[])
     GameView* appFrame = new GameView(800, 600);
     qDebug() << "Create Scene";
     
-    MainMenu* mainMenu = new MainMenu(800, 600, appFrame);
-    appFrame->setScene(mainMenu);
-    appFrame->show();
+    //MainMenu* mainMenu = new MainMenu(800, 600, appFrame);
+    //appFrame->setScene(mainMenu);
+    //appFrame->showFullScreen();
+    qDebug() << "Width: " << appFrame->width();
+    //appFrame->show();
 
     return application.exec();
+    delete appFrame;
 }
