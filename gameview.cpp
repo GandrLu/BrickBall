@@ -10,7 +10,7 @@ GameView::GameView(int _Width, int _Height)
 {
     showFullScreen();
     m_MainMenu = new MainMenu(width(), height(), this);
-    m_Game = new Game(width(), height(), this);
+    //m_Game = new Game(width(), height(), this);
     m_GameWidth = width();
     m_GameHeight = height();
 
@@ -39,7 +39,6 @@ void GameView::keyPressEvent(QKeyEvent* event)
 
 void GameView::m_LoadMainMenu()
 {
-    delete m_Game;
     setScene(m_MainMenu);
     show(); // needed?
     // Show cursor

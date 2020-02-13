@@ -24,6 +24,7 @@ public:
     int decreaseBallsInGame(int _Amount);
     UiPoints * m_GetScore();
     UiPoints * m_GetLifes();
+    Paddle * m_GetPaddle();
     void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);
@@ -40,7 +41,7 @@ private:
     //QGraphicsScene m_Scene;
     Brick * bricks[4][16];
     UiBar * m_UiBar;
-    Paddle * paddle;
+    Paddle * m_Paddle;
     GameView * m_GameView;
     // Sound of lost ball has to be played at the game instance because the 
     // ball itself gets deleted before it is able to play the sound

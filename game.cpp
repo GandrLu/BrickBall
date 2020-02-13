@@ -38,11 +38,11 @@ Game::Game(int _Width, int _Height, GameView* _ParentView)
         addItem(brick);
         bricks[1][i] = brick;
     }
-
+    
     m_UiBar = new UiBar(this);
     addItem(m_UiBar);
-    paddle = new Paddle(this);
-    paddle->m_PrepareBall(this);
+    m_Paddle = new Paddle(this);
+    m_Paddle->m_PrepareBall(this);
     m_SoundLostBall = new QMediaPlayer();
     m_SoundLostBall->setMedia(QUrl("qrc:/sounds/resources/sounds/wrongAnswer.mp3"));
 
@@ -65,7 +65,7 @@ int Game::m_GetUiBarHeight()
 
 int Game::increaseAvailableBalls(int _Amount)
 {
-    paddle->m_PrepareBall(this);
+    m_Paddle->m_PrepareBall(this);
     this->m_AvailableBalls += _Amount;
     return this->m_AvailableBalls;
 }
@@ -86,15 +86,20 @@ UiPoints * Game::m_GetLifes()
     return m_UiBar->m_GetLifes();
 }
 
+Paddle * Game::m_GetPaddle()
+{
+    return m_Paddle;
+}
+
 void Game::mouseMoveEvent(QGraphicsSceneMouseEvent * event) {
-    paddle->m_SetXPosition(event->scenePos().x());
+    m_Paddle->m_SetXPosition(event->scenePos().x());
 }
 
 void Game::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     QGraphicsScene::mousePressEvent(event);
     if (this->m_AvailableBalls > 0)
     {
-        paddle->m_FireBall();
+        m_Paddle->m_FireBall();
         ++this->m_BallsInGame;
         --this->m_AvailableBalls;
     }
