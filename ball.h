@@ -15,6 +15,7 @@
 
 class Game;
 
+// Has to derive from QObject to use signals and slots
 class Ball: public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT

@@ -25,7 +25,7 @@ Ball::Ball(Game* _Game, QObject* _Parent)
     // connect slot
     QTimer * timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(move()));
-    timer->start(25);
+    timer->start(18);
 }
 
 int Ball::GetSize()
@@ -59,7 +59,13 @@ void Ball::m_PlaySound(int _Type)
 void Ball::move()
 {
     if (!this->m_Fired)
+    {
+        QPointF paddlePos = m_Game->m_GetPaddle()->pos();
+        float paddleWidth = m_Game->m_GetPaddle()->boundingRect().width();
+        float paddleHeight = m_Game->m_GetPaddle()->boundingRect().height();
+        this->setPos(paddlePos.x() + (paddleWidth - m_Size) * 0.5, paddlePos.y() - paddleHeight * 0.5f);
         return;
+    }
     // Colliding with bricks
     QList<QGraphicsItem *> colliding_items = collidingItems();
     for(int i = 0, n = colliding_items.size(); i < n; ++i)
@@ -93,6 +99,10 @@ void Ball::move()
             {
                 qreal value = m_MovementRotation.angle() - 180;
                 m_MovementRotation.setAngle(180 - value);
+            }
+            else if (m_MovementRotation.angle() == 270)
+            {
+                m_MovementRotation.setAngle(90);
             }
             m_PlaySound(1);
 
