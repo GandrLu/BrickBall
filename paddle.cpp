@@ -38,8 +38,10 @@ void Paddle::m_FireBall()
 
 void Paddle::m_PrepareBall(Game * _Game)
 {
-    qDebug() << "Fire";
     this->m_PreparedBall = new Ball(_Game);
-    this->m_PreparedBall->setPos(pos().x() + (m_Width - m_PreparedBall->GetSize()) * 0.5f, pos().y() - m_PreparedBall->GetSize() - 1);
+    this->m_PreparedBall->setPos(pos().x() + 0.5f * ((qreal)m_Width - (qreal)m_PreparedBall->GetSize()), pos().y() - m_PreparedBall->GetSize() - 1);
+    qDebug() << "pos y: " << m_PreparedBall->pos().y();
+    //this->m_PreparedBall->setParentItem(this);
+    
     scene()->addItem(m_PreparedBall);
 }

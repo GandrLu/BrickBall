@@ -1,5 +1,6 @@
 #include "ball.h"
 #include "game.h"
+#include "gameview.h"
 #include "brick.h"
 #include "uipoints.h"
 
@@ -63,28 +64,28 @@ void Ball::move()
         QPointF paddlePos = m_Game->m_GetPaddle()->pos();
         float paddleWidth = m_Game->m_GetPaddle()->boundingRect().width();
         float paddleHeight = m_Game->m_GetPaddle()->boundingRect().height();
-        this->setPos(paddlePos.x() + (paddleWidth - m_Size) * 0.5, paddlePos.y() - paddleHeight * 0.5f);
+        this->setPos(paddlePos.x() + 0.5f * ((qreal)paddleWidth - m_Size), paddlePos.y() - m_Size - 1);
         return;
     }
     // Colliding with bricks
     QList<QGraphicsItem *> colliding_items = collidingItems();
+    qDebug() << "Initial angle " << m_MovementRotation.angle();
     for(int i = 0, n = colliding_items.size(); i < n; ++i)
     {
-        //qDebug() << typeid(*colliding_items[i]).name();
+        qDebug() << typeid(*colliding_items[i]).name();
         if (typeid (*colliding_items[i]) == typeid (Paddle))
         {
-            qDebug() << colliding_items[i]->boundingRect().width();
+            //qDebug() << colliding_items[i]->boundingRect().width();
             float paddlePosX = colliding_items[i]->pos().x();
             float relativePosX = pos().x() - paddlePosX;
             float factor = (relativePosX - 50) / 50;
-            qDebug() << "Faktor " << factor;
             float newAngle = factor * 60;
-            qDebug() << "newangle " << newAngle;
     
             newAngle += 270;
             m_MovementRotation.setAngle(newAngle);
+            qDebug() << "newangle " << m_MovementRotation.angle();
             
-            qDebug() << "PADDLE " << m_MovementRotation.angle();
+            //qDebug() << "PADDLE " << m_MovementRotation.angle();
             m_PlaySound();
         }
         if (typeid (*colliding_items[i]) == typeid (Brick))
@@ -107,9 +108,14 @@ void Ball::move()
             m_PlaySound(1);
 
             //m_MovementRotation.setAngle(-m_MovementRotation.angle());
-            m_Game->m_GetScore()->m_IncreasePoints();
-            scene()->removeItem(colliding_items[i]);
-            delete colliding_items[i];
+            Brick* brick = dynamic_cast<Brick*>(colliding_items[i]);
+            m_Game->m_GetScore()->m_IncreasePoints(brick->m_GetPointValue());
+            brick->m_ReduceLifePoints();
+            if (brick->m_GetLifePoints() <= 0)
+            {
+                scene()->removeItem(colliding_items[i]);
+                delete colliding_items[i];
+            }
         }
     }
 
@@ -144,6 +150,8 @@ void Ball::move()
         {
             m_Game->increaseAvailableBalls(1);
         }
+        else
+            m_Game->m_GetGameView()->m_LoadMainMenu();
         scene()->removeItem(this);
         delete this;
         return;

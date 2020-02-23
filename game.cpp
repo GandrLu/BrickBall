@@ -25,16 +25,14 @@ Game::Game(int _Width, int _Height, GameView* _ParentView)
     int brickHeight = (int)roundf(brickWidth / 3);
     
     for (int i = 0; i < m_MaxHorizontalBricks; ++i) {
-        Brick * brick = new Brick();
-        brick->setPixmap(QPixmap(":/images/resources/images/brick_red.png").scaled(brickWidth, brickHeight));
+        Brick * brick = new Brick(BrickType::brown, brickWidth, brickHeight);
         brick->setPos(0 + i * brickWidth, m_UiBarHeight);
         addItem(brick);
         bricks[0][i] = brick;
     }
     for (int i = 0; i < m_MaxHorizontalBricks; ++i) {
-        Brick* brick = new Brick();
-        brick->setPixmap(QPixmap(":/images/resources/images/brick_blue.png").scaled(brickWidth, brickHeight));
-        brick->setPos(0 + i * brickWidth, m_UiBarHeight + brickHeight);
+        Brick* brick = new Brick(BrickType::blue, brickWidth, brickHeight);
+        brick->setPos(0 + i * brickWidth, (qreal)(m_UiBarHeight + brickHeight));
         addItem(brick);
         bricks[1][i] = brick;
     }
@@ -89,6 +87,11 @@ UiPoints * Game::m_GetLifes()
 Paddle * Game::m_GetPaddle()
 {
     return m_Paddle;
+}
+
+GameView* Game::m_GetGameView()
+{
+    return this->m_GameView;
 }
 
 void Game::mouseMoveEvent(QGraphicsSceneMouseEvent * event) {

@@ -25,6 +25,7 @@ public:
     UiPoints * m_GetScore();
     UiPoints * m_GetLifes();
     Paddle * m_GetPaddle();
+    GameView * m_GetGameView();
     void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
     void mousePressEvent(QGraphicsSceneMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);
