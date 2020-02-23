@@ -23,19 +23,39 @@ Game::Game(int _Width, int _Height, GameView* _ParentView)
     // Calculate brick size
     int brickWidth = (int)roundf(m_PlayAreaWidth / m_MaxHorizontalBricks);
     int brickHeight = (int)roundf(brickWidth / 3);
-    
-    for (int i = 0; i < m_MaxHorizontalBricks; ++i) {
-        Brick * brick = new Brick(BrickType::brown, brickWidth, brickHeight);
-        brick->setPos(0 + i * brickWidth, m_UiBarHeight);
-        addItem(brick);
-        bricks[0][i] = brick;
+
+    short fillArray[][16] =
+    {
+        {2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2,},
+        {1, 1, 1, 1, 1, 1, 2, 0, 0, 2, 1, 1, 1, 1, 2, 2,},
+        {3, 3, 1, 1, 1, 1, 3, 3, 3, 3, 1, 1, 1, 1, 3, 3,},
+        {9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9,},
+    };
+
+    for (size_t v = 0; v < m_MaxVerticalBricks; v++)
+    {
+        for (size_t h = 0; h < m_MaxHorizontalBricks; h++)
+        {
+            if (fillArray[v][h] == 9)
+                continue;
+            Brick * brick = new Brick((BrickType)fillArray[v][h], brickWidth, brickHeight);
+            brick->setPos(0 + h * brickWidth, m_UiBarHeight + brickHeight * v);
+            addItem(brick);
+            m_Bricks[v][h] = brick;
+        }
     }
-    for (int i = 0; i < m_MaxHorizontalBricks; ++i) {
-        Brick* brick = new Brick(BrickType::blue, brickWidth, brickHeight);
-        brick->setPos(0 + i * brickWidth, (qreal)(m_UiBarHeight + brickHeight));
-        addItem(brick);
-        bricks[1][i] = brick;
-    }
+    //for (int i = 0; i < m_MaxHorizontalBricks; ++i) {
+    //    Brick * brick = new Brick(BrickType::brown, brickWidth, brickHeight);
+    //    brick->setPos(0 + i * brickWidth, m_UiBarHeight);
+    //    addItem(brick);
+    //    m_Bricks[0][i] = brick;
+    //}
+    //for (int i = 0; i < m_MaxHorizontalBricks; ++i) {
+    //    Brick* brick = new Brick(BrickType::blue, brickWidth, brickHeight);
+    //    brick->setPos(0 + i * brickWidth, (qreal)(m_UiBarHeight + brickHeight));
+    //    addItem(brick);
+    //    m_Bricks[1][i] = brick;
+    //}
     
     m_UiBar = new UiBar(this);
     addItem(m_UiBar);

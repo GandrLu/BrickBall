@@ -8,7 +8,7 @@ Brick::Brick(BrickType _type, int _BrickWidth, int _BrickHeight)
 	{
 	case red:
 		setPixmap(QPixmap(":/images/resources/images/brick_red.png").scaled(_BrickWidth, _BrickHeight));
-		m_PointValue = 50;
+		m_PointValue = 80;
 		m_LifePoints = 3;
 		break;
 	case blue:
@@ -23,7 +23,7 @@ Brick::Brick(BrickType _type, int _BrickWidth, int _BrickHeight)
 		break;
 	case brown:
 		setPixmap(QPixmap(":/images/resources/images/brick_brown.png").scaled(_BrickWidth, _BrickHeight));
-		m_PointValue = 30;
+		m_PointValue = 40;
 		m_LifePoints = 2;
 		break;
 	default:

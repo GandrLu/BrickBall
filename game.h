@@ -40,7 +40,7 @@ private:
     int m_AvailableBalls;
     int m_BallsInGame;
     //QGraphicsScene m_Scene;
-    Brick * bricks[4][16];
+    Brick * m_Bricks[4][16];
     UiBar * m_UiBar;
     Paddle * m_Paddle;
     GameView * m_GameView;
