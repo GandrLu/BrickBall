@@ -8,7 +8,6 @@
 #include <QGraphicsScene>
 #include <QDebug>
 #include <QObject>
-#include <QTimer>
 #include <qmath.h>
 #include <qmediaplaylist.h>
 #include <qmediaplayer.h>

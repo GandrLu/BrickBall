@@ -17,5 +17,6 @@
         <file>resources/images/paddleboat.png</file>
         <file>resources/images/background_simple.png</file>
         <file>resources/images/paddle.png</file>
+        <file>resources/images/extraBall.png</file>
     </qresource>
 </RCC>

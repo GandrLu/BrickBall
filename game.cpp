@@ -1,8 +1,12 @@
 #include <math.h>
+#include <stdlib.h>
+#include <time.h>
 #include "game.h"
 #include "brick.h"
 #include "uibar.h"
 #include "gameview.h"
+#include "extraballpu.h"
+#include "paddle.h"
 
 Game::Game(int _Width, int _Height, GameView* _ParentView)
     : m_UiBarWidth(_Width)
@@ -27,10 +31,13 @@ Game::Game(int _Width, int _Height, GameView* _ParentView)
     short fillArray[][16] =
     {
         {2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2,},
-        {1, 1, 1, 1, 1, 1, 2, 0, 0, 2, 1, 1, 1, 1, 2, 2,},
+        {2, 2, 1, 1, 1, 1, 2, 0, 0, 2, 1, 1, 1, 1, 2, 2,},
         {3, 3, 1, 1, 1, 1, 3, 3, 3, 3, 1, 1, 1, 1, 3, 3,},
         {9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9,},
     };
+
+    // Random seed
+    srand(time(NULL));
 
     for (size_t v = 0; v < m_MaxVerticalBricks; v++)
     {
@@ -42,21 +49,18 @@ Game::Game(int _Width, int _Height, GameView* _ParentView)
             brick->setPos(0 + h * brickWidth, m_UiBarHeight + brickHeight * v);
             addItem(brick);
             m_Bricks[v][h] = brick;
+
+            // 20 percent chance for a powerup/down
+            int nb = rand() % 5 + 1;
+            if (nb == 1)
+            {
+                // Add powerup
+                brick->m_AddPowerUp(this);
+                qDebug() << "Added pu";
+            }
         }
     }
-    //for (int i = 0; i < m_MaxHorizontalBricks; ++i) {
-    //    Brick * brick = new Brick(BrickType::brown, brickWidth, brickHeight);
-    //    brick->setPos(0 + i * brickWidth, m_UiBarHeight);
-    //    addItem(brick);
-    //    m_Bricks[0][i] = brick;
-    //}
-    //for (int i = 0; i < m_MaxHorizontalBricks; ++i) {
-    //    Brick* brick = new Brick(BrickType::blue, brickWidth, brickHeight);
-    //    brick->setPos(0 + i * brickWidth, (qreal)(m_UiBarHeight + brickHeight));
-    //    addItem(brick);
-    //    m_Bricks[1][i] = brick;
-    //}
-    
+
     m_UiBar = new UiBar(this);
     addItem(m_UiBar);
     m_Paddle = new Paddle(this);
@@ -83,6 +87,8 @@ int Game::m_GetUiBarHeight()
 
 int Game::increaseAvailableBalls(int _Amount)
 {
+    if (m_AvailableBalls >= 1)
+        return this->m_AvailableBalls;
     m_Paddle->m_PrepareBall(this);
     this->m_AvailableBalls += _Amount;
     return this->m_AvailableBalls;

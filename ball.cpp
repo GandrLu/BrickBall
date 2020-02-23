@@ -1,8 +1,10 @@
+#include <QTimer>
 #include "ball.h"
 #include "game.h"
 #include "gameview.h"
 #include "brick.h"
 #include "uipoints.h"
+#include "paddle.h"
 
 Ball::Ball(Game* _Game, QObject* _Parent)
     : m_Size(15)
@@ -109,10 +111,10 @@ void Ball::move()
 
             //m_MovementRotation.setAngle(-m_MovementRotation.angle());
             Brick* brick = dynamic_cast<Brick*>(colliding_items[i]);
-            m_Game->m_GetScore()->m_IncreasePoints(brick->m_GetPointValue());
             brick->m_ReduceLifePoints();
             if (brick->m_GetLifePoints() <= 0)
             {
+                m_Game->m_GetScore()->m_IncreasePoints(brick->m_GetPointValue());
                 scene()->removeItem(colliding_items[i]);
                 delete colliding_items[i];
             }

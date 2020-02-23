@@ -4,13 +4,13 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
-#include <paddle.h>
 #include <qmediaplayer.h>
 
 class Brick;
 class GameView;
 class UiBar;
 class UiPoints;
+class Paddle;
 
 class Game : public QGraphicsScene
 {

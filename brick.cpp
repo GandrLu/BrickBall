@@ -1,8 +1,11 @@
 #include "brick.h"
 #include <QGraphicsScene>
+#include "game.h"
+#include "extraballpu.h"
 
 Brick::Brick(BrickType _type, int _BrickWidth, int _BrickHeight)
 	: m_Type(_type)
+	, m_PowerUp(nullptr)
 {
 	switch (m_Type)
 	{
@@ -34,9 +37,24 @@ Brick::Brick(BrickType _type, int _BrickWidth, int _BrickHeight)
 	}
 }
 
+Brick::~Brick()
+{
+	if (this->m_PowerUp != nullptr)
+	{
+		m_PowerUp->m_AddToScene();
+		m_PowerUp->m_Drop();
+	}
+}
+
 void Brick::m_ReduceLifePoints(int _Value)
 {
 	this->m_LifePoints -= _Value;
+}
+
+void Brick::m_AddPowerUp(Game * _Game)
+{
+	m_PowerUp = new ExtraBallPU(_Game);
+	m_PowerUp->setPos(x(), y());
 }
 
 int Brick::m_GetPointValue()
