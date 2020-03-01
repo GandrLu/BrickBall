@@ -11,27 +11,27 @@ Brick::Brick(BrickType _type, int _BrickWidth, int _BrickHeight)
 	{
 	case red:
 		setPixmap(QPixmap(":/images/resources/images/brick_red.png").scaled(_BrickWidth, _BrickHeight));
-		m_PointValue = 80;
+		m_ScoreValue = 80;
 		m_LifePoints = 3;
 		break;
 	case blue:
 		setPixmap(QPixmap(":/images/resources/images/brick_blue.png").scaled(_BrickWidth, _BrickHeight));
-		m_PointValue = 10;
+		m_ScoreValue = 10;
 		m_LifePoints = 1;
 		break;
 	case green:
 		setPixmap(QPixmap(":/images/resources/images/brick_green.png").scaled(_BrickWidth, _BrickHeight));
-		m_PointValue = 20;
+		m_ScoreValue = 20;
 		m_LifePoints = 1;
 		break;
 	case brown:
 		setPixmap(QPixmap(":/images/resources/images/brick_brown.png").scaled(_BrickWidth, _BrickHeight));
-		m_PointValue = 40;
+		m_ScoreValue = 40;
 		m_LifePoints = 2;
 		break;
 	default:
 		setPixmap(QPixmap(":/images/resources/images/brick_blue.png").scaled(_BrickWidth, _BrickHeight));
-		m_PointValue = 10;
+		m_ScoreValue = 10;
 		m_LifePoints = 1;
 		break;
 	}
@@ -57,9 +57,9 @@ void Brick::m_AddPowerUp(Game * _Game)
 	m_PowerUp->setPos(x(), y());
 }
 
-int Brick::m_GetPointValue()
+int Brick::m_GetScoreValue()
 {
-	return this->m_PointValue;
+	return this->m_ScoreValue;
 }
 
 int Brick::m_GetLifePoints()

@@ -17,6 +17,7 @@ Game::Game(int _Width, int _Height, GameView* _ParentView)
     , m_MaxVerticalBricks(4)
     , m_AvailableBalls(1)
     , m_BallsInGame(0)
+    , m_BricksInGame(0)
     , m_GameView(_ParentView)
     //, m_Scene(new QGraphicsScene)
 {
@@ -47,9 +48,10 @@ Game::Game(int _Width, int _Height, GameView* _ParentView)
             if (fillArray[v][h] == 9)
                 continue;
             Brick * brick = new Brick((BrickType)fillArray[v][h], brickWidth, brickHeight);
-            brick->setPos(0 + h * brickWidth, m_UiBarHeight + distanceFromUpperBorder + brickHeight * v);
+            brick->setPos(0 + h * brickWidth, (qreal)(m_UiBarHeight + distanceFromUpperBorder + brickHeight * v));
             addItem(brick);
             m_Bricks[v][h] = brick;
+            ++m_BricksInGame;
 
             // 20 percent chance for a powerup/down
             int nb = rand() % 5 + 1;
@@ -107,6 +109,12 @@ int Game::m_DecreaseBallsInGame(int _Amount)
     return this->m_BallsInGame;
 }
 
+int Game::m_DecreaseBricksInGame(int _Amount)
+{
+    this->m_BricksInGame -= _Amount;
+    return this->m_BricksInGame;
+}
+
 UiPoints * Game::m_GetScore()
 {
     return m_UiBar->m_GetScore();
@@ -137,14 +145,6 @@ void Game::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     {
         m_Paddle->m_FireBall();
         --this->m_AvailableBalls;
-    }
-}
-
-void Game::keyPressEvent(QKeyEvent* event)
-{
-    if (event->key() == Qt::Key_Escape)
-    {
-        m_GameView->m_LoadMainMenu();
     }
 }
 

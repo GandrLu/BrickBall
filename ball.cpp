@@ -31,6 +31,10 @@ Ball::Ball(Game* _Game, QObject* _Parent)
     timer->start(18);
 }
 
+Ball::~Ball()
+{
+}
+
 int Ball::m_GetSize()
 {
     return this->m_Size;
@@ -87,7 +91,7 @@ void Ball::m_Move()
             m_MovementRotation.setAngle(newAngle);
             qDebug() << "newangle " << m_MovementRotation.angle();
             
-            //qDebug() << "PADDLE " << m_MovementRotation.angle();
+            qDebug() << "PADDLE " << m_MovementRotation.angle();
             m_PlaySound();
         }
         if (typeid (*colliding_items[i]) == typeid (Brick))
@@ -127,9 +131,11 @@ void Ball::m_Move()
             if (brick->m_GetLifePoints() <= 0)
             {
                 m_PlaySound(1);
-                m_Game->m_GetScore()->m_IncreasePoints(brick->m_GetPointValue());
+                m_Game->m_GetScore()->m_IncreasePoints(brick->m_GetScoreValue());
                 scene()->removeItem(colliding_items[i]);
                 delete colliding_items[i];
+                if (m_Game->m_DecreaseBricksInGame(1) <= 0)
+                    m_Game->m_GetGameView()->m_LoadMainMenu();
             }
         }
     }
