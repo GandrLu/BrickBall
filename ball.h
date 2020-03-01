@@ -21,10 +21,10 @@ class Ball: public QObject, public QGraphicsPixmapItem
 public:
     Ball(Game* _Game, QObject* _Parent = 0);
 public:
-    int GetSize();
-    void Fire();
+    int m_GetSize();
+    void m_Fire();
 public slots:
-    void move();
+    void m_Move();
 private:
     bool m_Fired;
     int m_Size;

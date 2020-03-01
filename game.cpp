@@ -30,15 +30,16 @@ Game::Game(int _Width, int _Height, GameView* _ParentView)
 
     short fillArray[][16] =
     {
-        {2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2,},
-        {2, 2, 1, 1, 1, 1, 2, 0, 0, 2, 1, 1, 1, 1, 2, 2,},
-        {3, 3, 1, 1, 1, 1, 3, 3, 3, 3, 1, 1, 1, 1, 3, 3,},
-        {9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9,},
+        {9, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 9,},
+        {9, 2, 1, 1, 1, 1, 2, 0, 0, 2, 1, 1, 1, 1, 2, 9,},
+        {9, 3, 1, 1, 1, 1, 3, 3, 3, 3, 1, 1, 1, 1, 3, 9,},
+        {9, 1, 1, 9, 9, 9, 9, 1, 1, 9, 9, 9, 9, 1, 1, 9,},
     };
 
     // Random seed
     srand(time(NULL));
 
+    int distanceFromUpperBorder = (int)(0.1 * m_PlayAreaHeight);
     for (size_t v = 0; v < m_MaxVerticalBricks; v++)
     {
         for (size_t h = 0; h < m_MaxHorizontalBricks; h++)
@@ -46,7 +47,7 @@ Game::Game(int _Width, int _Height, GameView* _ParentView)
             if (fillArray[v][h] == 9)
                 continue;
             Brick * brick = new Brick((BrickType)fillArray[v][h], brickWidth, brickHeight);
-            brick->setPos(0 + h * brickWidth, m_UiBarHeight + brickHeight * v);
+            brick->setPos(0 + h * brickWidth, m_UiBarHeight + distanceFromUpperBorder + brickHeight * v);
             addItem(brick);
             m_Bricks[v][h] = brick;
 
@@ -85,7 +86,7 @@ int Game::m_GetUiBarHeight()
     return m_UiBarHeight;
 }
 
-int Game::increaseAvailableBalls(int _Amount)
+int Game::m_IncreaseAvailableBalls(int _Amount)
 {
     if (m_AvailableBalls >= 1)
         return this->m_AvailableBalls;
@@ -94,7 +95,13 @@ int Game::increaseAvailableBalls(int _Amount)
     return this->m_AvailableBalls;
 }
 
-int Game::decreaseBallsInGame(int _Amount)
+int Game::m_IncreaseBallsInGame(int _Amount)
+{
+    this->m_BallsInGame += _Amount;
+    return this->m_BallsInGame;
+}
+
+int Game::m_DecreaseBallsInGame(int _Amount)
 {
     this->m_BallsInGame -= _Amount;
     return this->m_BallsInGame;
@@ -129,7 +136,6 @@ void Game::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     if (this->m_AvailableBalls > 0)
     {
         m_Paddle->m_FireBall();
-        ++this->m_BallsInGame;
         --this->m_AvailableBalls;
     }
 }

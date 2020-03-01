@@ -27,16 +27,16 @@ Ball::Ball(Game* _Game, QObject* _Parent)
 
     // connect slot
     QTimer * timer = new QTimer();
-    connect(timer, SIGNAL(timeout()), this, SLOT(move()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(m_Move()));
     timer->start(18);
 }
 
-int Ball::GetSize()
+int Ball::m_GetSize()
 {
     return this->m_Size;
 }
 
-void Ball::Fire()
+void Ball::m_Fire()
 {
     this->m_Fired = true;
 }
@@ -59,7 +59,7 @@ void Ball::m_PlaySound(int _Type)
     }
 }
 
-void Ball::move()
+void Ball::m_Move()
 {
     if (!this->m_Fired)
     {
@@ -69,18 +69,18 @@ void Ball::move()
         this->setPos(paddlePos.x() + 0.5f * ((qreal)paddleWidth - m_Size), paddlePos.y() - m_Size - 1);
         return;
     }
-    // Colliding with bricks
+    ///// BRICK AND PADDLE COLLIDING /////
     QList<QGraphicsItem *> colliding_items = collidingItems();
-    qDebug() << "Initial angle " << m_MovementRotation.angle();
     for(int i = 0, n = colliding_items.size(); i < n; ++i)
     {
-        qDebug() << typeid(*colliding_items[i]).name();
         if (typeid (*colliding_items[i]) == typeid (Paddle))
         {
             //qDebug() << colliding_items[i]->boundingRect().width();
+            Paddle* paddle = dynamic_cast<Paddle*>(colliding_items[i]);
+            float halfPaddleWidth = 0.5 * paddle->m_GetWidth();
             float paddlePosX = colliding_items[i]->pos().x();
             float relativePosX = pos().x() - paddlePosX;
-            float factor = (relativePosX - 50) / 50;
+            float factor = (relativePosX - halfPaddleWidth) / halfPaddleWidth;
             float newAngle = factor * 60;
     
             newAngle += 270;
@@ -107,13 +107,26 @@ void Ball::move()
             {
                 m_MovementRotation.setAngle(90);
             }
-            m_PlaySound(1);
+            else if (0 < m_MovementRotation.angle() && m_MovementRotation.angle() < 90)
+            {
+                // von links
+                qDebug() << "1";
+                m_MovementRotation.setAngle(360 - m_MovementRotation.angle());
+            }
+            else if (90 <= m_MovementRotation.angle() && m_MovementRotation.angle() < 180)
+            {
+                //von rechts
+                qDebug() << "2";
+                qreal value = m_MovementRotation.angle() - 90;
+                m_MovementRotation.setAngle(270 - value);
+            }
 
             //m_MovementRotation.setAngle(-m_MovementRotation.angle());
             Brick* brick = dynamic_cast<Brick*>(colliding_items[i]);
             brick->m_ReduceLifePoints();
             if (brick->m_GetLifePoints() <= 0)
             {
+                m_PlaySound(1);
                 m_Game->m_GetScore()->m_IncreasePoints(brick->m_GetPointValue());
                 scene()->removeItem(colliding_items[i]);
                 delete colliding_items[i];
@@ -122,7 +135,7 @@ void Ball::move()
     }
 
     // Bouncing from walls
-    // Ball is at upper border y == 0
+    ///// UPPER BORDER (y == 0) /////
     if (y() <= m_Game->m_GetUiBarHeight())
     {
         //qDebug() << "Top " << y();
@@ -142,23 +155,26 @@ void Ball::move()
         }
         m_PlaySound();
     }
-    // Ball is at bottom border y == height
+    ///// BOTTOM BORDER (y == height) /////
     else if (y() + m_Size >= scene()->height())
     {
         m_PlaySound(2);
         qDebug() << "Bottom: Remove ball";
-        m_Game->m_GetLifes()->m_DecreasePoints();
-        if (m_Game->m_GetLifes()->m_GetPoints() > 0)
+        if (m_Game->m_GetLifes()->m_GetPoints() > 0
+            && m_Game->m_DecreaseBallsInGame(1) <= 0)
         {
-            m_Game->increaseAvailableBalls(1);
+            m_Game->m_GetLifes()->m_DecreasePoints();
+            m_Game->m_IncreaseAvailableBalls(1);
         }
-        else
+        else if (m_Game->m_GetLifes()->m_GetPoints() <= 0)
+        {
             m_Game->m_GetGameView()->m_LoadMainMenu();
+        }
         scene()->removeItem(this);
         delete this;
         return;
     }
-    // Ball is at left border x == 0
+    ///// LEFT BORDER (x == 0) /////
     else if (x() <= 0)
     {
         qDebug() << "Left " << m_MovementRotation.angle();
@@ -174,7 +190,7 @@ void Ball::move()
         }
         m_PlaySound();
     }
-    // Ball is at right border x == width
+    ///// RIGHT BORDER (x == width) /////
     else if (x() + m_Size >= scene()->width())
     {
         qDebug() << "Right " << m_MovementRotation.angle();

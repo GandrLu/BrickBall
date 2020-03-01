@@ -17,6 +17,7 @@ public:
     Paddle(QGraphicsScene * scene = 0);
     ~Paddle();
 public:
+    int m_GetWidth();
     void m_SetXPosition(int _XPos);
     void m_FireBall();
     void m_PrepareBall(Game * _Game);

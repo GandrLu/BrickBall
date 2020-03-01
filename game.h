@@ -20,8 +20,9 @@ public:
     int m_GetAreaWidth() const;
     int m_GetAreaHeight() const;
     int m_GetUiBarHeight();
-    int increaseAvailableBalls(int _Amount);
-    int decreaseBallsInGame(int _Amount);
+    int m_IncreaseAvailableBalls(int _Amount);
+    int m_IncreaseBallsInGame(int _Amount);
+    int m_DecreaseBallsInGame(int _Amount);
     UiPoints * m_GetScore();
     UiPoints * m_GetLifes();
     Paddle * m_GetPaddle();

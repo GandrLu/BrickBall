@@ -22,7 +22,7 @@ void ExtraBallPU::m_ExecuteCollision()
 		if (typeid (*colliding_items[i]) == typeid (Paddle))
 		{
 			
-			m_Game->increaseAvailableBalls(1);
+			m_Game->m_IncreaseAvailableBalls(1);
 			delete(this);
 			return;
 		}
