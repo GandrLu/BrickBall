@@ -45,7 +45,7 @@ private:
     // The rotation of the ball, is a member additionally to the QGraphicsRotation
     // of the QGraphicsPixmapItem to avoid rotating of itself because that would
     // rotate the picture of the ball what is unwanted
-    QGraphicsRotation m_MovementRotation;
+    QGraphicsRotation* m_MovementRotation;
     // MediaPlayer for bouncing sound
     // Works better with different players because switching the sound files in
     // one takes to long and avoids playing different sounds in a fast sequence

@@ -16,23 +16,28 @@ Ball::Ball(Game* _Game, QObject* _Parent)
     , m_Fired(false)
 {
     setParent(_Parent);
-    m_MovementRotation.setAngle(270);
+    // 270° is straight upwards on the vertival axis in qt
+    m_MovementRotation->setAngle(270);
 
-    // set graphics
+    // set ball graphic
     setPixmap(QPixmap(":/images/resources/images/ball.png").scaled(m_Size,m_Size));
 
-    // set sound
+    // set sound files
     m_SoundDefault->setMedia(QUrl("qrc:/sounds/resources/sounds/hint.mp3"));
     m_SoundScore->setMedia(QUrl("qrc:/sounds/resources/sounds/score_powerOn.mp3"));
 
-    // connect slot
+    // connect slot to timer
     QTimer * timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(m_Move()));
+    // start timer
     timer->start(18);
 }
 
 Ball::~Ball()
 {
+    delete m_MovementRotation;
+    delete m_SoundDefault;
+    delete m_SoundScore;
 }
 
 int Ball::m_GetSize()
@@ -88,41 +93,41 @@ void Ball::m_Move()
             float newAngle = factor * 60;
     
             newAngle += 270;
-            m_MovementRotation.setAngle(newAngle);
-            qDebug() << "newangle " << m_MovementRotation.angle();
+            m_MovementRotation->setAngle(newAngle);
+            qDebug() << "newangle " << m_MovementRotation->angle();
             
-            qDebug() << "PADDLE " << m_MovementRotation.angle();
+            qDebug() << "PADDLE " << m_MovementRotation->angle();
             m_PlaySound();
         }
         if (typeid (*colliding_items[i]) == typeid (Brick))
         {
-            qDebug() << "BRICK " << m_MovementRotation.angle();
-            if (360 > m_MovementRotation.angle() && m_MovementRotation.angle() > 270)
+            qDebug() << "BRICK " << m_MovementRotation->angle();
+            if (360 > m_MovementRotation->angle() && m_MovementRotation->angle() > 270)
             {
-                qreal value = m_MovementRotation.angle() - 270;
-                m_MovementRotation.setAngle(90 - value);
+                qreal value = m_MovementRotation->angle() - 270;
+                m_MovementRotation->setAngle(90 - value);
             }
-            else if (270 > m_MovementRotation.angle() && m_MovementRotation.angle() > 180)
+            else if (270 > m_MovementRotation->angle() && m_MovementRotation->angle() > 180)
             {
-                qreal value = m_MovementRotation.angle() - 180;
-                m_MovementRotation.setAngle(180 - value);
+                qreal value = m_MovementRotation->angle() - 180;
+                m_MovementRotation->setAngle(180 - value);
             }
-            else if (m_MovementRotation.angle() == 270)
+            else if (m_MovementRotation->angle() == 270)
             {
-                m_MovementRotation.setAngle(90);
+                m_MovementRotation->setAngle(90);
             }
-            else if (0 < m_MovementRotation.angle() && m_MovementRotation.angle() < 90)
+            else if (0 < m_MovementRotation->angle() && m_MovementRotation->angle() < 90)
             {
                 // von links
                 qDebug() << "1";
-                m_MovementRotation.setAngle(360 - m_MovementRotation.angle());
+                m_MovementRotation->setAngle(360 - m_MovementRotation->angle());
             }
-            else if (90 <= m_MovementRotation.angle() && m_MovementRotation.angle() < 180)
+            else if (90 <= m_MovementRotation->angle() && m_MovementRotation->angle() < 180)
             {
                 //von rechts
                 qDebug() << "2";
-                qreal value = m_MovementRotation.angle() - 90;
-                m_MovementRotation.setAngle(270 - value);
+                qreal value = m_MovementRotation->angle() - 90;
+                m_MovementRotation->setAngle(270 - value);
             }
 
             //m_MovementRotation.setAngle(-m_MovementRotation.angle());
@@ -145,19 +150,19 @@ void Ball::m_Move()
     if (y() <= m_Game->m_GetUiBarHeight())
     {
         //qDebug() << "Top " << y();
-        if (360 > m_MovementRotation.angle() && m_MovementRotation.angle() > 270)
+        if (360 > m_MovementRotation->angle() && m_MovementRotation->angle() > 270)
         {
-            qreal value = m_MovementRotation.angle() - 270;
-            m_MovementRotation.setAngle(90 - value);
+            qreal value = m_MovementRotation->angle() - 270;
+            m_MovementRotation->setAngle(90 - value);
         }
-        else if (270 > m_MovementRotation.angle() && m_MovementRotation.angle() > 180)
+        else if (270 > m_MovementRotation->angle() && m_MovementRotation->angle() > 180)
         {
-            qreal value = m_MovementRotation.angle() - 180;
-            m_MovementRotation.setAngle(180 - value);
+            qreal value = m_MovementRotation->angle() - 180;
+            m_MovementRotation->setAngle(180 - value);
         }
-        else if (m_MovementRotation.angle() == 270)
+        else if (m_MovementRotation->angle() == 270)
         {
-            m_MovementRotation.setAngle(90);
+            m_MovementRotation->setAngle(90);
         }
         m_PlaySound();
     }
@@ -183,38 +188,38 @@ void Ball::m_Move()
     ///// LEFT BORDER (x == 0) /////
     else if (x() <= 0)
     {
-        qDebug() << "Left " << m_MovementRotation.angle();
-        if (180 > m_MovementRotation.angle() && m_MovementRotation.angle() > 90)
+        qDebug() << "Left " << m_MovementRotation->angle();
+        if (180 > m_MovementRotation->angle() && m_MovementRotation->angle() > 90)
         {
-            qreal value = m_MovementRotation.angle() - 90;
-            m_MovementRotation.setAngle(90 - value);
+            qreal value = m_MovementRotation->angle() - 90;
+            m_MovementRotation->setAngle(90 - value);
         }
-        else if (270 > m_MovementRotation.angle() && m_MovementRotation.angle() > 180)
+        else if (270 > m_MovementRotation->angle() && m_MovementRotation->angle() > 180)
         {
-            qreal value = m_MovementRotation.angle() - 180;
-            m_MovementRotation.setAngle(360 - value);
+            qreal value = m_MovementRotation->angle() - 180;
+            m_MovementRotation->setAngle(360 - value);
         }
         m_PlaySound();
     }
     ///// RIGHT BORDER (x == width) /////
     else if (x() + m_Size >= scene()->width())
     {
-        qDebug() << "Right " << m_MovementRotation.angle();
-        if (90 > m_MovementRotation.angle() && m_MovementRotation.angle() > 0)
+        qDebug() << "Right " << m_MovementRotation->angle();
+        if (90 > m_MovementRotation->angle() && m_MovementRotation->angle() > 0)
         {
-            m_MovementRotation.setAngle(180 - m_MovementRotation.angle());
+            m_MovementRotation->setAngle(180 - m_MovementRotation->angle());
         }
-        else if (360 > m_MovementRotation.angle() && m_MovementRotation.angle() > 270)
+        else if (360 > m_MovementRotation->angle() && m_MovementRotation->angle() > 270)
         {
-            qreal value = 360 - m_MovementRotation.angle();
-            m_MovementRotation.setAngle(180 + value);
+            qreal value = 360 - m_MovementRotation->angle();
+            m_MovementRotation->setAngle(180 + value);
         }
         m_PlaySound();
     }
 
     // Move on
     int STEP_SIZE = m_Speed;
-    double theta = m_MovementRotation.angle();
+    double theta = m_MovementRotation->angle();
 
     double dy = STEP_SIZE * qSin(qDegreesToRadians(theta));
     double dx = STEP_SIZE * qCos(qDegreesToRadians(theta));
