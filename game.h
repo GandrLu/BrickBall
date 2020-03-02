@@ -21,6 +21,7 @@ public:
     // application and _ParentView is a reference to the GameView this game is 
     // running in.
     Game(int _Width, int _Height, GameView* _ParentView);
+    ~Game();
 public:
     // Returns the play area width
     int m_GetAreaWidth() const;

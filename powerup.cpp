@@ -13,13 +13,14 @@ PowerUp::PowerUp(Game * _Game, QObject* parent)
 	setPixmap(QPixmap(":/images/resources/images/ball.png").scaled(15, 15));
 
 	// connect slot
-	QTimer* timer = new QTimer();
-	connect(timer, SIGNAL(timeout()), this, SLOT(move()));
-	timer->start(18);
+	m_Timer = new QTimer();
+	connect(m_Timer, SIGNAL(timeout()), this, SLOT(move()));
+	m_Timer->start(18);
 }
 
 PowerUp::~PowerUp()
 {
+	delete m_Timer;
 }
 
 void PowerUp::m_Drop()
@@ -36,6 +37,7 @@ void PowerUp::move()
 {
 	if (this->m_IsDropped)
 	{
+		// Move 5 pixels down each tick and check collisions
 		this->setPos(x(), y() + 5);
 		this->m_ExecuteCollision();
 	}

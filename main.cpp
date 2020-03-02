@@ -11,17 +11,11 @@
 
 int main(int argc, char *argv[])
 {
-    qDebug() << "Create Application";
+    // Create Application
     QApplication application(argc, argv);
-    qDebug() << "Create view";
-    GameView* appFrame = new GameView(800, 600);
-    qDebug() << "Create Scene";
     
-    //MainMenu* mainMenu = new MainMenu(800, 600, appFrame);
-    //appFrame->setScene(mainMenu);
-    //appFrame->showFullScreen();
-    qDebug() << "Width: " << appFrame->width();
-    //appFrame->show();
+    // Create view
+    GameView* appFrame = new GameView(800, 600);
 
     return application.exec();
     delete appFrame;

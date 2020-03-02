@@ -85,7 +85,7 @@ void Ball::m_Move()
     // Check for collisions with paddle or bricks
     ///// BRICK AND PADDLE COLLIDING /////
     QList<QGraphicsItem *> colliding_items = collidingItems();
-    for(int i = 0, n = colliding_items.size(); i < n; ++i)
+    for(size_t i = 0, n = colliding_items.size(); i < n; ++i)
     {
         // PADDLE collision
         if (typeid (*colliding_items[i]) == typeid (Paddle))

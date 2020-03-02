@@ -19,16 +19,18 @@ Game::Game(int _Width, int _Height, GameView* _ParentView)
     , m_BallsInGame(0)
     , m_BricksInGame(0)
     , m_GameView(_ParentView)
-    //, m_Scene(new QGraphicsScene)
 {
+    // Set size of scene
     setSceneRect(0, 0, _Width, _Height);
-    QPixmap* background = new QPixmap(":/images/resources/images/background_simple.png");
-    addPixmap(background->scaled(m_PlayAreaWidth, m_PlayAreaHeight))->setPos(0, m_UiBarHeight);
+    // Set background image
+    QPixmap background = QPixmap(":/images/resources/images/background_simple.png");
+    addPixmap(background.scaled(m_PlayAreaWidth, m_PlayAreaHeight))->setPos(0, m_UiBarHeight);
 
     // Calculate brick size
     int brickWidth = (int)roundf(m_PlayAreaWidth / m_MaxHorizontalBricks);
     int brickHeight = (int)roundf(brickWidth / 3);
 
+    // Create level brick layout, "9" is for a gap without a brick
     short fillArray[][16] =
     {
         {9, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 9,},
@@ -40,20 +42,26 @@ Game::Game(int _Width, int _Height, GameView* _ParentView)
     // Random seed
     srand(time(NULL));
 
+    // Create bricks for each value of fillArray
     int distanceFromUpperBorder = (int)(0.1 * m_PlayAreaHeight);
     for (size_t v = 0; v < m_MaxVerticalBricks; v++)
     {
         for (size_t h = 0; h < m_MaxHorizontalBricks; h++)
         {
+            // Place no brick for "9"
             if (fillArray[v][h] == 9)
+            {
+                m_Bricks[v][h] = nullptr;
                 continue;
+            }
             Brick * brick = new Brick((BrickType)fillArray[v][h], brickWidth, brickHeight);
-            brick->setPos(0 + h * brickWidth, (qreal)(m_UiBarHeight + distanceFromUpperBorder + brickHeight * v));
+            brick->setPos(0 + h * brickWidth, (qreal)(m_UiBarHeight + distanceFromUpperBorder) + brickHeight * v);
+            // Add to scene
             addItem(brick);
             m_Bricks[v][h] = brick;
             ++m_BricksInGame;
 
-            // 20 percent chance for a powerup/down
+            // 20 percent chance for a powerup/down in this brick
             int nb = rand() % 5 + 1;
             if (nb == 1)
             {
@@ -63,14 +71,32 @@ Game::Game(int _Width, int _Height, GameView* _ParentView)
         }
     }
 
+    // Add user interface bar to game
     m_UiBar = new UiBar(this);
     addItem(m_UiBar);
     m_Paddle = new Paddle(this);
     m_Paddle->m_PrepareBall(this);
     m_SoundLostBall = new QMediaPlayer();
     m_SoundLostBall->setMedia(QUrl("qrc:/sounds/resources/sounds/wrongAnswer.mp3"));
-
 }
+
+Game::~Game()
+{
+    for (size_t v = 0; v < m_MaxVerticalBricks; v++)
+    {
+        for (size_t h = 0; h < m_MaxHorizontalBricks; h++)
+        {
+            if (m_Bricks[v][h] != nullptr)
+            {
+                delete m_Bricks[v][h];
+            }
+        }
+    }
+    delete m_UiBar;
+    delete m_SoundLostBall;
+    delete m_Paddle;
+}
+
 
 int Game::m_GetAreaWidth() const
 {
@@ -89,8 +115,10 @@ int Game::m_GetUiBarHeight()
 
 int Game::m_IncreaseAvailableBalls(int _Amount)
 {
+    // Only when there is no available ball
     if (m_AvailableBalls >= 1)
         return this->m_AvailableBalls;
+    // Set it up on the paddle
     m_Paddle->m_PrepareBall(this);
     this->m_AvailableBalls += _Amount;
     return this->m_AvailableBalls;
@@ -142,6 +170,7 @@ void Game::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     QGraphicsScene::mousePressEvent(event);
     if (this->m_AvailableBalls > 0)
     {
+        // Let a prepared ball get into motion
         m_Paddle->m_FireBall();
         --this->m_AvailableBalls;
     }

@@ -9,8 +9,8 @@ MainMenu::MainMenu(int _Width, int _Height, GameView* _ParentView)
     float vDistanceBetweenElements = _Height / 5;
 
     // Set background pic
-    QPixmap* background = new QPixmap(":/images/resources/images/background_simple.png");
-    addPixmap(background->scaled(_Width, _Height))->setPos(0, 0);
+    QPixmap background = QPixmap(":/images/resources/images/background_simple.png");
+    addPixmap(background.scaled(_Width, _Height))->setPos(0, 0);
 
     // Title Text
     m_TextTitle = new QGraphicsTextItem("Brick Ball");
@@ -41,8 +41,6 @@ MainMenu::MainMenu(int _Width, int _Height, GameView* _ParentView)
     m_TextCopyright->setFont(QFont("terminal", 8));
     m_TextCopyright->setPos((_Width - m_TextCopyright->boundingRect().width()) * 0.5, vDistanceBetweenElements * 4);
     addItem(m_TextCopyright);
-
-    delete background;
 }
 
 MainMenu::~MainMenu()

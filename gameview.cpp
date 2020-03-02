@@ -4,34 +4,33 @@
 
 GameView::GameView(int _Width, int _Height)
     : m_Game(nullptr)
-    , m_MainMenu(new MainMenu(width(), height(), this))
-    //, m_Game(new Game(width(), height(), this))
-    , m_GameWidth(width())
-    , m_GameHeight(height())
+    , m_GameWidth(_Width)
+    , m_GameHeight(_Height)
 {
     showFullScreen();
-    //m_MainMenu = new MainMenu(width(), height(), this);
-    //m_Game = new Game(width(), height(), this);
-    //m_GameWidth = width();
-    //m_GameHeight = height();
-
+    // This line seems not to work when initialized in initialization list, 
+    // maybe because of "this"
+    m_MainMenu = new MainMenu(width(), height(), this);
+    
+    // Avoid scrolling in game
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    //setFixedSize(_Width, _Height);
-    //showFullScreen();
     setMouseTracking(true);
 
+    // Initially load the main menu
     m_LoadMainMenu();
 }
 
 GameView::~GameView()
 {
     delete m_MainMenu;
-    delete m_Game;
+    if (m_Game != nullptr)
+        delete m_Game;
 }
 
 void GameView::keyPressEvent(QKeyEvent* event)
 {
+    // On press of esc return to main menu
     if (event->key() == Qt::Key_Escape)
     {
         m_LoadMainMenu();
@@ -41,7 +40,7 @@ void GameView::keyPressEvent(QKeyEvent* event)
 void GameView::m_LoadMainMenu()
 {
     setScene(m_MainMenu);
-    show(); // needed?
+    //show(); // needed?
     //if (m_Game != nullptr)
         //delete m_Game;
     // Show cursor

@@ -5,6 +5,7 @@
 #include <QGraphicsPixmapItem>
 
 class Game;
+class QTimer;
 
 // This PowerUp is a abstract class to make different kinds of powerups from.
 // Can be attached to and dropped by bricks, moves down when dropped and can be 
@@ -36,6 +37,8 @@ protected:
 private:
 	// Flag to determine if this is in motion state (dropped = in motion)
 	bool m_IsDropped;
+	// Timer for movement
+	QTimer* m_Timer;
 };
 
 #endif // POWERUP_H
