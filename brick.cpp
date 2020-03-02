@@ -7,6 +7,7 @@ Brick::Brick(BrickType _type, int _BrickWidth, int _BrickHeight)
 	: m_Type(_type)
 	, m_PowerUp(nullptr)
 {
+	// Set up values depending on type
 	switch (m_Type)
 	{
 	case red:
@@ -39,6 +40,8 @@ Brick::Brick(BrickType _type, int _BrickWidth, int _BrickHeight)
 
 Brick::~Brick()
 {
+	// Drops and initializes a powerup when this brick is destroyed and when it 
+	// has a powerup
 	if (this->m_PowerUp != nullptr)
 	{
 		m_PowerUp->m_AddToScene();

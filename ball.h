@@ -13,11 +13,12 @@
 #include <qmediaplayer.h>
 
 class Game;
+class QTimer;
 
 // Ball is the PixmapItem that moves over the screen, destroys bricks and 
 // bounces from them as well as from the paddle and the game borders. 
 // Except from the bottom border, when it goes lower than that, the ball is
-// lost and destroyed.
+// lost and destroyed. Contains movement and collision calculations.
 // Has to derive from QObject to use signals and slots
 class Ball: public QObject, public QGraphicsPixmapItem
 {
@@ -54,6 +55,8 @@ private:
     QMediaPlayer* m_SoundScore;
     // Reference to the game the ball is in
     Game* m_Game;
+    // Timer to invoke the moving slot
+    QTimer* m_Timer;
 private:
     // Plays the bouncing, scoring or ball lost sound depending on the _Type 
     // parameter. Without argument it plays the bouncing sound.

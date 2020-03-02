@@ -3,16 +3,17 @@
 #include "mainmenu.h"
 
 GameView::GameView(int _Width, int _Height)
-    /*: m_MainMenu(new MainMenu(width(), height(), this))
-    , m_Game(new Game(width(), height(), this))
+    : m_Game(nullptr)
+    , m_MainMenu(new MainMenu(width(), height(), this))
+    //, m_Game(new Game(width(), height(), this))
     , m_GameWidth(width())
-    , m_GameHeight(height())*/
+    , m_GameHeight(height())
 {
     showFullScreen();
-    m_MainMenu = new MainMenu(width(), height(), this);
+    //m_MainMenu = new MainMenu(width(), height(), this);
     //m_Game = new Game(width(), height(), this);
-    m_GameWidth = width();
-    m_GameHeight = height();
+    //m_GameWidth = width();
+    //m_GameHeight = height();
 
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -41,6 +42,8 @@ void GameView::m_LoadMainMenu()
 {
     setScene(m_MainMenu);
     show(); // needed?
+    //if (m_Game != nullptr)
+        //delete m_Game;
     // Show cursor
     QGuiApplication::setOverrideCursor(Qt::ArrowCursor);
 }

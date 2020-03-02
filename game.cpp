@@ -59,7 +59,6 @@ Game::Game(int _Width, int _Height, GameView* _ParentView)
             {
                 // Add powerup
                 brick->m_AddPowerUp(this);
-                qDebug() << "Added pu";
             }
         }
     }

@@ -27,10 +27,10 @@ Ball::Ball(Game* _Game, QObject* _Parent)
     m_SoundScore->setMedia(QUrl("qrc:/sounds/resources/sounds/score_powerOn.mp3"));
 
     // connect slot to timer
-    QTimer * timer = new QTimer();
-    connect(timer, SIGNAL(timeout()), this, SLOT(m_Move()));
+    m_Timer = new QTimer();
+    connect(m_Timer, SIGNAL(timeout()), this, SLOT(m_Move()));
     // start timer
-    timer->start(18);
+    m_Timer->start(15);
 }
 
 Ball::~Ball()
@@ -38,6 +38,7 @@ Ball::~Ball()
     delete m_MovementRotation;
     delete m_SoundDefault;
     delete m_SoundScore;
+    delete m_Timer;
 }
 
 int Ball::m_GetSize()
@@ -70,6 +71,9 @@ void Ball::m_PlaySound(int _Type)
 
 void Ball::m_Move()
 {
+    // If ball is not fired move it along with the paddle (update ball pos.
+    // according to paddle pos.)
+    ///// MOVE WITH PADDLE /////
     if (!this->m_Fired)
     {
         QPointF paddlePos = m_Game->m_GetPaddle()->pos();
@@ -78,30 +82,38 @@ void Ball::m_Move()
         this->setPos(paddlePos.x() + 0.5f * ((qreal)paddleWidth - m_Size), paddlePos.y() - m_Size - 1);
         return;
     }
+    // Check for collisions with paddle or bricks
     ///// BRICK AND PADDLE COLLIDING /////
     QList<QGraphicsItem *> colliding_items = collidingItems();
     for(int i = 0, n = colliding_items.size(); i < n; ++i)
     {
+        // PADDLE collision
         if (typeid (*colliding_items[i]) == typeid (Paddle))
         {
-            //qDebug() << colliding_items[i]->boundingRect().width();
+            // Calculate exit angle of bouncing ball, depends on collision point
+            // on the paddle
             Paddle* paddle = dynamic_cast<Paddle*>(colliding_items[i]);
             float halfPaddleWidth = 0.5 * paddle->m_GetWidth();
             float paddlePosX = colliding_items[i]->pos().x();
+            // X position of ball measured from right end of paddle
             float relativePosX = pos().x() - paddlePosX;
+            // Factor from -1 to +1
             float factor = (relativePosX - halfPaddleWidth) / halfPaddleWidth;
+            // Calculate angle in range from -60 to +60
             float newAngle = factor * 60;
     
+            // Add/Remove new angle to/from 270 what is the angle for straight upwards
+            // result is in range from 210 to 330
             newAngle += 270;
             m_MovementRotation->setAngle(newAngle);
-            qDebug() << "newangle " << m_MovementRotation->angle();
             
-            qDebug() << "PADDLE " << m_MovementRotation->angle();
             m_PlaySound();
         }
+        // BRICK collision
         if (typeid (*colliding_items[i]) == typeid (Brick))
         {
-            qDebug() << "BRICK " << m_MovementRotation->angle();
+            // Calculate exit angle, is like incoming angle but in other direction
+            // 270° is north, 90° south, 360° west and 180° east in qt
             if (360 > m_MovementRotation->angle() && m_MovementRotation->angle() > 270)
             {
                 qreal value = m_MovementRotation->angle() - 270;
@@ -118,38 +130,36 @@ void Ball::m_Move()
             }
             else if (0 < m_MovementRotation->angle() && m_MovementRotation->angle() < 90)
             {
-                // von links
-                qDebug() << "1";
                 m_MovementRotation->setAngle(360 - m_MovementRotation->angle());
             }
             else if (90 <= m_MovementRotation->angle() && m_MovementRotation->angle() < 180)
             {
-                //von rechts
-                qDebug() << "2";
                 qreal value = m_MovementRotation->angle() - 90;
                 m_MovementRotation->setAngle(270 - value);
             }
 
-            //m_MovementRotation.setAngle(-m_MovementRotation.angle());
             Brick* brick = dynamic_cast<Brick*>(colliding_items[i]);
             brick->m_ReduceLifePoints();
+            // If brick has no lifepoints left, destroy it and increase players score
             if (brick->m_GetLifePoints() <= 0)
             {
                 m_PlaySound(1);
                 m_Game->m_GetScore()->m_IncreasePoints(brick->m_GetScoreValue());
                 scene()->removeItem(colliding_items[i]);
                 delete colliding_items[i];
+                ///// GAME WON if all bricks are destroyed
                 if (m_Game->m_DecreaseBricksInGame(1) <= 0)
                     m_Game->m_GetGameView()->m_LoadMainMenu();
             }
         }
     }
 
-    // Bouncing from walls
+    // Bouncing from walls / play area borders
     ///// UPPER BORDER (y == 0) /////
     if (y() <= m_Game->m_GetUiBarHeight())
     {
-        //qDebug() << "Top " << y();
+        m_PlaySound();
+        // Calculate exit angle
         if (360 > m_MovementRotation->angle() && m_MovementRotation->angle() > 270)
         {
             qreal value = m_MovementRotation->angle() - 270;
@@ -164,31 +174,38 @@ void Ball::m_Move()
         {
             m_MovementRotation->setAngle(90);
         }
-        m_PlaySound();
     }
+    // If the ball reaches the bottom border it gets destroyed and a new ball 
+    // is prepared if available
     ///// BOTTOM BORDER (y == height) /////
     else if (y() + m_Size >= scene()->height())
     {
         m_PlaySound(2);
-        qDebug() << "Bottom: Remove ball";
+        // Has player still balls (lifes) and no ball is in the game anymore, 
+        // then make a new ball available
         if (m_Game->m_GetLifes()->m_GetPoints() > 0
             && m_Game->m_DecreaseBallsInGame(1) <= 0)
         {
             m_Game->m_GetLifes()->m_DecreasePoints();
             m_Game->m_IncreaseAvailableBalls(1);
         }
-        else if (m_Game->m_GetLifes()->m_GetPoints() <= 0)
+        ///// GAME OVER when the player has no balls left and no ball is in 
+        // the game anymore
+        else if (m_Game->m_GetLifes()->m_GetPoints() <= 0
+                 && m_Game->m_DecreaseBallsInGame(1) <= 0)
         {
             m_Game->m_GetGameView()->m_LoadMainMenu();
         }
+        // Destroy this ball
         scene()->removeItem(this);
         delete this;
         return;
     }
+    // Bounce
     ///// LEFT BORDER (x == 0) /////
     else if (x() <= 0)
     {
-        qDebug() << "Left " << m_MovementRotation->angle();
+        m_PlaySound();
         if (180 > m_MovementRotation->angle() && m_MovementRotation->angle() > 90)
         {
             qreal value = m_MovementRotation->angle() - 90;
@@ -199,12 +216,12 @@ void Ball::m_Move()
             qreal value = m_MovementRotation->angle() - 180;
             m_MovementRotation->setAngle(360 - value);
         }
-        m_PlaySound();
     }
+    // Bounce
     ///// RIGHT BORDER (x == width) /////
     else if (x() + m_Size >= scene()->width())
     {
-        qDebug() << "Right " << m_MovementRotation->angle();
+        m_PlaySound();
         if (90 > m_MovementRotation->angle() && m_MovementRotation->angle() > 0)
         {
             m_MovementRotation->setAngle(180 - m_MovementRotation->angle());
@@ -214,10 +231,10 @@ void Ball::m_Move()
             qreal value = 360 - m_MovementRotation->angle();
             m_MovementRotation->setAngle(180 + value);
         }
-        m_PlaySound();
     }
 
-    // Move on
+    // When ball did not get destroyed, move it forward in its angle direction
+    ///// Movement /////
     int STEP_SIZE = m_Speed;
     double theta = m_MovementRotation->angle();
 
@@ -225,5 +242,4 @@ void Ball::m_Move()
     double dx = STEP_SIZE * qCos(qDegreesToRadians(theta));
 
     this->setPos(x() + dx, y() + dy);
-    //qDebug() << m_MovementRotation.angle();
 }
