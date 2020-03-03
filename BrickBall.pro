@@ -1,4 +1,5 @@
-QT       += core gui
+QT       += core gui \
+         multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -18,15 +19,27 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     ball.cpp \
     brick.cpp \
+    extraballpu.cpp \
     game.cpp \
+    gameview.cpp \
     main.cpp \
-    paddle.cpp
+    mainmenu.cpp \
+    paddle.cpp \
+    powerup.cpp \
+    uibar.cpp \
+    uipoints.cpp
 
 HEADERS += \
     ball.h \
     brick.h \
+    extraballpu.h \
     game.h \
-    paddle.h
+    gameview.h \
+    mainmenu.h \
+    paddle.h \
+    powerup.h \
+    uibar.h \
+    uipoints.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
