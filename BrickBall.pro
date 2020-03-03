@@ -19,21 +19,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     ball.cpp \
     brick.cpp \
+    extraballpu.cpp \
     game.cpp \
     gameview.cpp \
     main.cpp \
     mainmenu.cpp \
     paddle.cpp \
+    powerup.cpp \
     uibar.cpp \
     uipoints.cpp
 
 HEADERS += \
     ball.h \
     brick.h \
+    extraballpu.h \
     game.h \
     gameview.h \
     mainmenu.h \
     paddle.h \
+    powerup.h \
     uibar.h \
     uipoints.h
 
