@@ -1,6 +1,11 @@
 # BrickBall
 
 ### Hinweise
+
+#### Ausführen der Executable
+1. BrickBallExecutable.exe entpacken
+2. BrickBall.exe darin starten
+
 #### Ausführen des Projektes mit QT Creator
 1. QT Creator starten und mit "Open Project" BrickBall.pro öffnen
 2. Passendes Konfigurations Kit auswählen
