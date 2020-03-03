@@ -2,16 +2,15 @@
 #include "game.h"
 #include "mainmenu.h"
 
-GameView::GameView(int _Width, int _Height)
+GameView::GameView()
     : m_Game(nullptr)
-    , m_GameWidth(_Width)
-    , m_GameHeight(_Height)
 {
     showFullScreen();
-    // This line seems not to work when initialized in initialization list, 
-    // maybe because of "this"
+    // Has to be set up after fullscreen to receive right size
     m_MainMenu = new MainMenu(width(), height(), this);
-    
+    m_GameWidth = width();
+    m_GameHeight = height();
+
     // Avoid scrolling in game
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -34,17 +33,15 @@ void GameView::keyPressEvent(QKeyEvent* event)
     if (event->key() == Qt::Key_Escape)
     {
         m_LoadMainMenu();
+        delete m_Game;
     }
 }
 
 void GameView::m_LoadMainMenu()
 {
     setScene(m_MainMenu);
-    //show(); // needed?
-    //if (m_Game != nullptr)
-        //delete m_Game;
-    // Show cursor
-    QGuiApplication::setOverrideCursor(Qt::ArrowCursor);
+    // Show cursor (disabled to enhance paddle control)
+    //QGuiApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
 void GameView::m_LoadGame()
@@ -52,7 +49,7 @@ void GameView::m_LoadGame()
     // Create new game to wipe old game state
     m_Game = new Game(m_GameWidth, m_GameHeight, this);
     setScene(m_Game);
-    show(); // needed?
-    // Hide cursor
-    QGuiApplication::setOverrideCursor(Qt::BlankCursor);
+    // Hide cursor  (disabled to enhance paddle control because when mouse is 
+    // outside the gameview the paddle does not move)
+    //QGuiApplication::setOverrideCursor(Qt::BlankCursor);
 }

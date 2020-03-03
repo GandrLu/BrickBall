@@ -15,7 +15,7 @@ class GameView : public QGraphicsView
 
 public:
 	// _Width and _Height of the application
-	GameView(int _Width, int _Height);
+	GameView();
 	~GameView();
 public:
 	// Event on pressing of a key of the keyboard, when pressing escape in the 

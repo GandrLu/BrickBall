@@ -13,9 +13,9 @@ int main(int argc, char *argv[])
 {
     // Create Application
     QApplication application(argc, argv);
-    
+
     // Create view
-    GameView* appFrame = new GameView(800, 600);
+    GameView* appFrame = new GameView();
 
     return application.exec();
     delete appFrame;

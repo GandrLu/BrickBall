@@ -30,7 +30,7 @@ Ball::Ball(Game* _Game, QObject* _Parent)
     m_Timer = new QTimer();
     connect(m_Timer, SIGNAL(timeout()), this, SLOT(m_Move()));
     // start timer
-    m_Timer->start(15);
+    m_Timer->start(18);
 }
 
 Ball::~Ball()

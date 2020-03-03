@@ -9,7 +9,7 @@ UiPoints::UiPoints(QString _UiText, int _StartAmount, QGraphicsItem * _Parent)
     // Set label text
     setPlainText(QString(m_UiText) + QString::number(m_Points));
     setDefaultTextColor(Qt::black);
-    setFont(QFont("arial", 16));
+    setFont(QFont("Courier", 16, 75));
 }
 
 void UiPoints::m_IncreasePoints(int _Amount)
