@@ -33,7 +33,6 @@ void GameView::keyPressEvent(QKeyEvent* event)
     if (event->key() == Qt::Key_Escape)
     {
         m_LoadMainMenu();
-        delete m_Game;
     }
 }
 
