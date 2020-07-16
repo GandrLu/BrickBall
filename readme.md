@@ -1,6 +1,32 @@
 # BrickBall
+### Notes (English)
 
-### Hinweise
+#### Executing the executable
+1. Unpack BrickBallExecutable.exe
+2. Start BrickBall.exe in it
+
+#### Running the project with QT Creator
+1. Start QT Creator and open BrickBall.pro with "Open Project
+2. Select the appropriate configuration kit
+3. "Run "Build Project
+4. "Execute "Run
+
+#### Running the project with Visual Studio + Qt VS Tools Extension
+1. Start Visual Studio without opening a project "Continue without code
+2. Select "Extensions -> Qt VS Tools -> Open Qt Project File" and open BrickBall.pro
+3. Start the "Local Windows Debugger" in the desired configuration (Qt VS Tools must be installed)
+
+#### Operation of the application
+- **Mouse movement**: Control the paddle
+
+- **Any mouse click**: Ball on paddle is shot
+
+- **Escape key in the game**: Return to main menu
+
+
+---
+
+### Hinweise (German)
 
 #### Ausführen der Executable
 1. BrickBallExecutable.exe entpacken
@@ -18,13 +44,8 @@
 3. In der gewünschten Konfiguration den "Local Windows Debugger" starten (Qt VS Tools müssen eingerichtet sein)
 
 #### Bedienung der Anwendung
-**Mausbewegung**: Steuern des Paddles
-**Beliebiger Mausklick**: Ball der auf Paddle liegt wird abgeschossen
-**Escape im Spiel**: Rückkehr ins Hauptmenü
+- **Mausbewegung**: Steuern des Paddles
 
-#### Bekannte Bugs / Probleme
-- Beim Verlassen des Spiels ins Hauptmenü läuft das Spiel im Hintergrund weiter, Sounds sind zu hören
-    - Ich wollte `m_Game` (die Game Szene) in diesem Fall deleten, leider hat das zu Fehlern geführt die ich nicht nachvollziehen konnte
-    - Beim einem neuen Spiel wird die Game Szene aber überschrieben darum ist dann nicht das vorherige Spiel da (könnte natürlich auch gewollt sein).
-- Der Mauscursor wird nicht in der Anwendung gefangen, falls er das Spiel verlässt (bei z.B. mehreren Monitoren) bewegt sich das Paddle nicht
-    - Ich hatte erst den Cursor ausgeblendet, habe ihn jetzt eingeblendet damit man ihn besser im Spielfenster behalten kann
+- **Beliebiger Mausklick**: Ball der auf Paddle liegt wird abgeschossen
+
+- **Escape Taste im Spiel**: Rückkehr ins Hauptmenü
